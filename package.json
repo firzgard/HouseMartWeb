@@ -1,0 +1,18 @@
+{
+  "name": "housemart",
+  "version": "1.0.0",
+  "description": "SAD Practical Project",
+  "main": "server.js",
+  "scripts": {
+	"start": "node app/server.js",
+	"test": "echo \"Error: no test specified\" && exit 1",
+	"build": "",
+	"dev": ""
+  },
+  "dependencies": {
+		"express": "~4.0.0",
+		"body-parser": "~1.0.1"
+		},
+  "author": "Steven Firzen <megafirzen@gmail.com> (http://islashf.net/)",
+  "license": "MIT"
+}
