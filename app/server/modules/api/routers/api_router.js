@@ -1,17 +1,21 @@
-// router_api_android.js
+// api_router.js
 
 // BASE SETUP
 // ================================================
 
-var express = require('express'),
-	mssql	= require('mssql');
+var express 	= require('express'),
+	mssql		= require('mssql');
 
-var router = express.Router();
+var router		= express.Router();
 
-router.route('/')
+
+// ROUTING
+// ================================================
+
+router.route('/android')
 	// Get all posts (Access at GET http://localhost:[portNumber]/api/android)
 	.get(function(req, res) {
-		var mssqlConnector = new mssql.Connection(consts.dbConfig);
+		var mssqlConnector = new mssql.Connection(configs.dbConfig);
 
 		mssqlConnector.connect()
 			.then(function(){

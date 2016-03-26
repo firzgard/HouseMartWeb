@@ -9,15 +9,15 @@ global.makeRootPath = function(relativeURI) {
 }
 
 // Dependencies
-var utils				= require(makeRootPath('server/assets/utils'));
+var utils				= require(makeRootPath('server/shared/middlewares/utils.js'));
 
 var	express				= require('express'),
 	bodyParser			= require('body-parser'),
 	mssql				= require('mssql');
 
-var routerAPIAndroid	= require(makeRootPath('server/routes/router_api_android'));
+var router				= require(makeRootPath('server/shared/routers/router.js'));
 
-global.consts			= require(makeRootPath('server/assets/consts'));
+global.configs			= require(makeRootPath('server/shared/data/configs.js'));
 
 // Configs
 
@@ -30,18 +30,11 @@ expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(bodyParser.json());
 
 
-
-var port = 3000;
-
-// ROUTING
+// REGISTER ROUTERs
 // ================================================
 
+expressApp.use('/', router);
 
-// REGISTER OUR ROUTES
-// ================================================
-
-// Router for providing API for android app
-expressApp.use('/api/android', routerAPIAndroid);
 
 // EVENT HANDLERS
 // ================================================
@@ -51,6 +44,7 @@ function exitHandler(options, err) {
 	if (err) console.log(err.stack);
 	if (options.exit) process.exit();
 }
+
 
 // EVENTS
 // ================================================
@@ -66,6 +60,6 @@ process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 
 // START THE SERVER
 // ================================================
-var server = expressApp.listen(port, function () {
+var server = expressApp.listen(process.env.PORT || configs.port, function () {
 	console.log('IslashF started. Listening on port ' + server.address().port);
 });

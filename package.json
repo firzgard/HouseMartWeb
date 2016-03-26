@@ -4,15 +4,23 @@
   "description": "SAD Practical Project",
   "main": "server.js",
   "scripts": {
-	"start": "node app/server.js",
-	"test": "echo \"Error: no test specified\" && exit 1",
-	"build": "",
-	"dev": ""
+    "start": "node app/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "",
+    "dev": ""
   },
   "dependencies": {
-		"express": "~4.0.0",
-		"body-parser": "~1.0.1"
-		},
+    "angular": "1.5.2",
+    "angular-ui-bootstrap": "1.2.5",
+    "body-parser": "~1.0.1",
+    "bootstrap": "3.3.6",
+    "express": "~4.0.0",
+    "grunt": "0.4.5",
+    "jsonwebtoken": "5.7.0"
+  },
   "author": "Steven Firzen <megafirzen@gmail.com> (http://islashf.net/)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "grunt-contrib-concat": "1.0.0"
+  }
 }
