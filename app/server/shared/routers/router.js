@@ -3,13 +3,13 @@
 // BASE SETUP
 // ================================================
 
-var express 	= require('express'),
-	mssql		= require('mssql');
+var express 		= require('express');
 
-var router		= express.Router();
+var routerAPI		= require(makeRootPath('server/modules/api/routers/api_router.js')),
+	routerLogin		= require(makeRootPath('server/modules/login/routers/login_router.js')),
+	routerSignup	= require(makeRootPath('server/modules/signup/routers/signup_router.js'));
 
-var routerAPI	= require(makeRootPath('server/modules/api/routers/api_router.js'));
-
+var router			= express.Router();
 
 // ROUTING
 // ================================================
@@ -21,13 +21,14 @@ router.get('/', function(req, res){
 
 // homepage
 router.get('/home', function(req, res){
-	res.sendfile(makeRootPath('public/modules/home/templates/home.html'));
+	res.sendFile(makeRootPath('public/modules/home/templates/home.html'));
 });
 
 // login page
-router.get('/login', function(req, res){
-	res.sendfile(makeRootPath('public/modules/login/templates/login.html'));
-});
+router.use('/login', routerLogin);
+
+// Register page
+router.use('/signup', routerSignup)
 
 // Route for providing static assets
 router.use('/assets', express.static(makeRootPath('public')));

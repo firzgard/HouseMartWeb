@@ -3,39 +3,23 @@
 // BASE SETUP
 // ================================================
 
-var express 	= require('express'),
-	mssql		= require('mssql');
+var express 				= require('express'),
+	mssql					= require('mssql'),
+	jwt						= require('jsonwebtoken');
 
-var router		= express.Router();
+var routerAPIAndroid		= require(makeRootPath('server/modules/api/routers/api_android_router.js')),
+	routerAPIAuthenticate	= require(makeRootPath('server/modules/api/routers/api_authenticate_router.js'));
+
+var router					= express.Router();
 
 
 // ROUTING
 // ================================================
 
-router.route('/android')
-	// Get all posts (Access at GET http://localhost:[portNumber]/api/android)
-	.get(function(req, res) {
-		var mssqlConnector = new mssql.Connection(configs.dbConfig);
+// Route for authenticate user (Access at POST http://localhost:[portNumber]/api/authenticate)
+router.use('/authenticate', routerAPIAuthenticate);
 
-		mssqlConnector.connect()
-			.then(function(){
-				var mssqlRequestor = new mssql.Request(mssqlConnector);
-
-				mssqlRequestor.query("SELECT * FROM tbl_HouseAndLand")
-					.then(function(resultSet){
-						mssqlConnector.close();
-						res.json(resultSet);
-					})
-					.catch(function(err){
-						mssqlConnector.close();
-						console.log(err);
-						res.send(err);
-					});
-			})
-			.catch(function(err){
-				console.log(err);
-				res.send(err);
-			});
-	});
+// Routes for android API
+router.use('/android', routerAPIAndroid);
 
 module.exports = router;

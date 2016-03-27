@@ -13,7 +13,8 @@ var utils				= require(makeRootPath('server/shared/middlewares/utils.js'));
 
 var	express				= require('express'),
 	bodyParser			= require('body-parser'),
-	mssql				= require('mssql');
+	cookieParser		= require('cookie-parser'),
+	morgan				= require('morgan');
 
 var router				= require(makeRootPath('server/shared/routers/router.js'));
 
@@ -28,6 +29,13 @@ expressApp	= express();
 // Let us get the data from POST request
 expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(bodyParser.json());
+
+// Config app to use cookieParser()
+// Let us eat cookies!!
+expressApp.use(cookieParser());
+
+// Use morgan to log requests to the console
+expressApp.use(morgan('dev'));
 
 
 // REGISTER ROUTERs
