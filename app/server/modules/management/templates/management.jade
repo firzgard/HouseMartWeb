@@ -1,0 +1,24 @@
+doctype html
+html(lang='en', ng-app="HouseMart")
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width')
+		title HouseMart
+		link(rel='stylesheet', href='assets/shared/libs/bootstrap/css/bootstrap.css')
+		link(rel='stylesheet', href='assets/shared/libs/bootstrap/css/bootstrap-theme.css')
+		link(rel='stylesheet', href='assets/shared/styles/css/main.css')
+
+		script(src='assets/shared/libs/angular/angular.js')
+		script(src='assets/shared/libs/angular-ui-bootstrap/ui-bootstrap-tpls.js')
+		script(src='assets/modules/management/scripts/management_angular.js')
+	body
+		header
+			include /server/modules/headerBar/templates/headerBar.jade
+		.container.col-md-10
+			.col-md-3#side-bar
+				include /server/modules/management/templates/sideBar.jade
+			.col-md-9#main-content
+				include /server/modules/postLoader/templates/postLoader.jade
+				include /server/modules/management/templates/accountSetting.jade
+			#search-bar
+				include /server/modules/searchBar/templates/searchBar.jade

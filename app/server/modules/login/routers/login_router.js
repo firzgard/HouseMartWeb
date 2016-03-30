@@ -13,24 +13,33 @@ var router			= express.Router();
 // ROUTING
 // ================================================
 
-// Route for authenticate user (Access at POST http://localhost:[portNumber]/api/authenticate)
-router.route('/')
-	.get(function(req, res){
 
-		res.sendFile(makeRootPath('public/modules/login/templates/login.html'));
+router.route('/')
+	// Route for getting login page (Access at GET http://(host)[:(port)]/login)
+	.get(authenticator.authorize, function(req, res){
+
+		if(req.authorization == 0) {
+
+			res.render(makeRootPath('server/modules/login/templates/login.jade'));
+		} else {
+
+			res.redirect('/home');
+		}
 	})
+	// Route for logging in (Access at POST http://(host)[:(port)]/login)
 	.post(authenticator.authenticate, function(req, res){
+
 		if(req.authentication.success) {
 
 			res.cookie('token', req.authentication.token, {
-				maxAge: 60 * 60,
+				maxAge: (60 * 60 * 1000),
 				httpOnly: true
 			});
 
 			res.redirect('/home');
 		} else {
 
-			res.sendFile(makeRootPath('public/modules/login/templates/login.html'));
+			res.render(makeRootPath('server/modules/login/templates/login.jade'));
 		}
 	});
 

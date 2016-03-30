@@ -6,7 +6,7 @@
 //Global utils
 global.makeRootPath = function(relativeURI) {
     return __dirname + '/' + relativeURI;
-}
+};
 
 // Dependencies
 var utils				= require(makeRootPath('server/shared/middlewares/utils.js'));
@@ -24,6 +24,9 @@ global.configs			= require(makeRootPath('server/shared/data/configs.js'));
 
 // Create express application instance
 expressApp	= express();
+
+
+expressApp.locals.basedir		= __dirname
 
 // Config app to use bodyParser()
 // Let us get the data from POST request
