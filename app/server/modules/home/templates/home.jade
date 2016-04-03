@@ -1,0 +1,29 @@
+doctype html
+html(lang='en', ng-app='HouseMart')
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width')
+		title HouseMart
+
+		link(rel='stylesheet', href='assets/libs/bootstrap/css/bootstrap.css')
+		link(rel='stylesheet', href='assets/libs/bootstrap/css/bootstrap-theme.css')
+		link(rel='stylesheet', href='assets/shared/styles/css/main.css')
+
+	body(ng-cloak)
+		header
+			include /app/server/modules/headerBar/templates/headerBar.jade
+
+		.content-container.col-md-8.col-md-offset-2
+			#post-container
+				include /app/server/modules/postLoader/templates/postLoader.jade
+		#search-bar
+			include /app/server/modules/searchBar/templates/searchBar.jade
+
+		script(src='assets/libs/angular/angular.js')
+		script(src='assets/libs/angular-ui-bootstrap/ui-bootstrap-tpls.js')
+		script(src='assets/libs/angular-resource/angular-resource.js')
+		script(src='assets/libs/angular-utils-pagination/dirPagination.js')
+		script(src='assets/shared/scripts/ng_restServices.js')
+		script(src='assets/modules/home/scripts/home_ng_app.js')
+		script(src='assets/modules/postLoader/scripts/postLoader_ng_controller.js')
+		script(src='assets/modules/home/scripts/home_main.js')

@@ -125,7 +125,6 @@ module.exports = {
 
 			// No token, authorize user as guest
 			req.authorization = configs.roles.guest;
-			console.log(req.authorization);
 			next();
 		}
 	}

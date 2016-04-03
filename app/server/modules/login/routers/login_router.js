@@ -5,7 +5,7 @@
 
 var express 		= require('express');
 
-var authenticator	= require(makeRootPath('server/shared/middlewares/authenticator.js'));
+var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js'));
 
 var router			= express.Router();
 
@@ -20,7 +20,7 @@ router.route('/')
 
 		if(req.authorization == 0) {
 
-			res.render(makeRootPath('server/modules/login/templates/login.jade'));
+			res.render(makeRootPath('app/server/modules/login/templates/login.jade'));
 		} else {
 
 			res.redirect('/home');
@@ -39,7 +39,7 @@ router.route('/')
 			res.redirect('/home');
 		} else {
 
-			res.render(makeRootPath('server/modules/login/templates/login.jade'));
+			res.render(makeRootPath('app/server/modules/login/templates/login.jade'));
 		}
 	});
 

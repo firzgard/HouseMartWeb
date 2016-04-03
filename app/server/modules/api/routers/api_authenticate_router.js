@@ -7,7 +7,7 @@ var express 	= require('express');
 
 var router		= express.Router();
 
-var authenticator	= require(makeRootPath('server/shared/middlewares/authenticator.js'));
+var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js'));
 
 
 // ROUTING

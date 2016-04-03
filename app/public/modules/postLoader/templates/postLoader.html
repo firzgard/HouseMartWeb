@@ -1,0 +1,10 @@
+<div ng-controller="PostLoaderController">
+	<ul id="posts">
+		<li ng-repeat="post in posts | filter:query | orderBy:orderProp" class="post-thumbnail">
+			<a href="#/posts/{{post.id}}" class="thumb"><img ng-src="{{post.imageUrl}}" alt="No Image"></a>
+			<p>{{post.price}}</p>
+			<p>{{post.area}}</p>
+			<p>{{post.description}}</p>
+		</li>
+	</ul>
+</div>

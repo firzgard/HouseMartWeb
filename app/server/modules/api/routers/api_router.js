@@ -7,9 +7,9 @@ var express 				= require('express'),
 	mssql					= require('mssql'),
 	jwt						= require('jsonwebtoken');
 
-var routerAPIPosts			= require(makeRootPath('server/modules/api/routers/api_posts_router.js')),
-	routerAPIUsers			= require(makeRootPath('server/modules/api/routers/api_users_router.js')),
-	routerAPIAuthenticate	= require(makeRootPath('server/modules/api/routers/api_authenticate_router.js'));
+var routerAPIPosts			= require(makeRootPath('app/server/modules/api/routers/api_posts_router.js')),
+	routerAPIUsers			= require(makeRootPath('app/server/modules/api/routers/api_users_router.js')),
+	routerAPIAuthenticate	= require(makeRootPath('app/server/modules/api/routers/api_authenticate_router.js'));
 
 var router					= express.Router();
 

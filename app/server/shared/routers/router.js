@@ -5,19 +5,20 @@
 
 var express 		= require('express');
 
-var routerAPI		= require(makeRootPath('server/modules/api/routers/api_router.js')),
-	routerLogin		= require(makeRootPath('server/modules/login/routers/login_router.js')),
-	routerSignup	= require(makeRootPath('server/modules/signup/routers/signup_router.js'));
+var routerAPI		= require(makeRootPath('app/server/modules/api/routers/api_router.js')),
+	routerLogin		= require(makeRootPath('app/server/modules/login/routers/login_router.js')),
+	routerSignup	= require(makeRootPath('app/server/modules/signup/routers/signup_router.js')),
+	routerAssets	= require(makeRootPath('app/server/shared/routers/asset_router.js'));
 
 var router			= express.Router();
 
-var authenticator	= require(makeRootPath('server/shared/middlewares/authenticator.js'));
+var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js'));
 
 // ROUTING
 // ================================================
 
 // Route for providing static assets
-router.use('/assets', express.static(makeRootPath('public')));
+router.use('/assets', routerAssets);
 
 // Redirect from default to homepage
 router.get('/', function(req, res){
@@ -26,7 +27,7 @@ router.get('/', function(req, res){
 
 // homepage
 router.get('/home', authenticator.authorize, function(req, res){
-	res.sendFile(makeRootPath('public/modules/home/templates/home.html'));
+	res.render(makeRootPath('app/server/modules/home/templates/home.jade'));
 });
 
 // login page
@@ -37,7 +38,7 @@ router.use('/signup', authenticator.authorize, routerSignup);
 
 // Register page
 router.get('/management', authenticator.authorize, function(req, res){
-	res.render(makeRootPath('server/modules/management/templates/management.jade'))
+	res.render(makeRootPath('app/server/modules/management/templates/management.jade'))
 });
 
 // Route for providing API for android app

@@ -1,0 +1,21 @@
+div(ng-controller='PostLoaderController')
+
+	.paginator-option
+		.form-group
+			label Order By:
+			select.form-control(ng-model='paginator.orderProp' ng-options='opt as opt for opt in paginator.orderOptions')
+		.form-group
+			label Posts per Page:
+			select.form-control(ng-model='paginator.itemsPerPage' ng-options='opt as opt for opt in [5, 6, 7, 8, 9, 10]')
+
+	dir-pagination-controls.paginator(max-size='8', direction-links='true', boundary-links='true', auto-hide='true', pagination-id='post-loader', template-url='assets/libs/angular-utils-pagination/dirPagination.tpl.html')
+
+	ul#posts
+		li.post-thumbnail(dir-paginate='post in posts | filter: query | orderBy: paginator.orderProp | itemsPerPage: paginator.itemsPerPage', pagination-id='post-loader')
+			a.thumbnail-img(href='')
+				img(src='assets/shared/imgs/home-icon.png', alt='No Image')
+			p {{post.price}}
+			p {{post.area}}
+			p {{post.description}}
+
+	dir-pagination-controls.paginator(max-size='8', direction-links='true', boundary-links='true', auto-hide='true', pagination-id='post-loader', template-url='assets/libs/angular-utils-pagination/dirPagination.tpl.html')

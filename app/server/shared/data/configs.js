@@ -21,11 +21,11 @@ module.exports = {
 	// Datafields allowed to retrieve through API calls based on authorization
 	dataFields: {
 		post: {
-			guest: 'posts.id, ownerName, address, province, city, phone, description, area, price, type, dateCreate, dateUpdate',
+			guest: 'posts.id, ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate',
 			authorizedUser: 'posts.id, ownerName, address, province, city, phone, description, area, price, type, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		},
 		posts: {
-			guest: 'posts.id, ownerName, address, province, city, phone, description, area, price, type, dateCreate, dateUpdate',
+			guest: 'posts.id, ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate',
 			authorizedUser: 'posts.id, ownerName, address, province, city, phone, description, area, price, type, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		}
 	},

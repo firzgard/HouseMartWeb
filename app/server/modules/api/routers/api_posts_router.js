@@ -9,7 +9,7 @@ var express 	= require('express'),
 
 var router		= express.Router();
 
-var authenticator	= require(makeRootPath('server/shared/middlewares/authenticator.js'));
+var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js'));
 
 
 // ROUTING
@@ -20,12 +20,10 @@ router.route('/')
 	// Get all posts (Access at GET http://(host)[:(port)]/api/posts)
 	.get(function(req, res) {
 		var mssqlConnector = new mssql.Connection(configs.dbConfig);
-
 		mssqlConnector.connect()
 			.then(function(){
 				var mssqlRequestor = new mssql.Request(mssqlConnector);
-
-				mssqlRequestor.query("SELECT " + dataFields + " FROM tbl_HouseAndLand ORDER BY dateUpdate")
+				mssqlRequestor.query("SELECT " + "*" + " FROM tbl_HouseAndLand ORDER BY dateUpdate")
 					.then(function(resultSet){
 						mssqlConnector.close();
 						res.json(resultSet);

@@ -9,16 +9,16 @@ global.makeRootPath = function(relativeURI) {
 };
 
 // Dependencies
-var utils				= require(makeRootPath('server/shared/middlewares/utils.js'));
+var utils				= require(makeRootPath('app/server/shared/middlewares/utils.js'));
 
 var	express				= require('express'),
 	bodyParser			= require('body-parser'),
 	cookieParser		= require('cookie-parser'),
 	morgan				= require('morgan');
 
-var router				= require(makeRootPath('server/shared/routers/router.js'));
+var router				= require(makeRootPath('app/server/shared/routers/router.js'));
 
-global.configs			= require(makeRootPath('server/shared/data/configs.js'));
+global.configs			= require(makeRootPath('app/server/shared/data/configs.js'));
 
 // Configs
 

@@ -1,0 +1,50 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+
+.content-container {
+	padding: 2em 4em 2em 4em;
+	border: 1px solid #ddd;
+}
+
+.post-thumbnail {
+	height: 15em;
+	display: block;
+	padding: 1.5em 1em 1em 1em;
+	margin-bottom: 1em;
+	background:  hsla(0, 0%, 100%, 0.8);
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+#posts {
+	padding: 0;
+}
+.post-thumbnail .thumbnail-img img {
+	height: 100%;
+	max-width: 20em;
+	float: left;
+	margin-right: 1em;
+	display: block;
+}
+
+.paginator {
+	display: block;
+	text-align: center;
+}
+
+.paginator-option {
+	display: block;
+	text-align: right;
+
+}
+
+.paginator-option .form-group {
+	display: inline-block;
+	margin-left: 2em;
+}
+.paginator-option select {
+	width: auto;
+	display: inline-block;
+	margin-left: 1em;
+}
