@@ -15,6 +15,7 @@
 * Automatic testing
 * Fine-tune dist environment
   * Uglifiy, minify, compressing resources
+  * Server Logging
 
 ###API ROUTES:
 
@@ -22,17 +23,15 @@
 `http://(host)[:(port)]/api/posts (POST)`
 ####  Get/search all posts with general infos (Guest/User/Admin)  
 `http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][province=(province)][&][district=(district)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
-Supported query params include:  
-| Keyword       | Expected Type   | Note            |
-| ------------- | --------------- | --------------- |
-| creatorID     | Integer         | If equals userID, then allow viewing setting isDetailed flag |
-| province      | String          |                 |
-| district      | String          |                 |
-| minPrice      | Float           |                 |
-| maxPrice      | Float           |                 |
-| minArea       | Float           |                 |
-| maxArea       | Float           |                 |
-| isDetailed    | Boolean         | Default is false. If allowed to set and is setted to true, then show hidden details |
+#####Supported query params include:  
+  * creatorID (Integer): If equals userID, then allow viewing setting isDetailed flag.
+  * province (String)
+  * district (String)
+  * minPrice (Float)
+  * maxPrice (Float)
+  * minArea (Float)
+  * maxArea (Float)
+  * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
 ####  Get 1 post with detailed infos (Guest/User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID) (GET)`
 ####  Update 1 post (User/Admin)  
