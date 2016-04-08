@@ -32,6 +32,7 @@
   * minArea (Float)
   * maxArea (Float)
   * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
+  
 ####  Get 1 post with detailed infos (Guest/User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID) (GET)`
 ####  Update 1 post (User/Admin)  
