@@ -19,7 +19,7 @@ var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenti
 // Route for providing specific libraries
 router.use('/libs/angular', express.static(makeRootPath('node_modules/angular')));
 router.use('/libs/angular-resource', express.static(makeRootPath('node_modules/angular-resource')));
-router.use('/libs/angular-route', express.static(makeRootPath('node_modules/angular-route')));
+router.use('/libs/angular-ui-router', express.static(makeRootPath('node_modules/angular-ui-router/release')));
 router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modules/angular-ui-bootstrap/dist')));
 router.use('/libs/angular-utils-pagination', express.static(makeRootPath('node_modules/angular-utils-pagination')));
 

@@ -2,11 +2,48 @@
 
 // RESTful client for angular modules
 
-var restServices = angular.module('RestServices', ['ngResource']);
+var apiServices = angular.module('HouseMart.APIServices', ['ngResource']);
 
-restServices.factory('Post', ['$resource', function($resource){
+apiServices.factory('$APIService', ['$resource', function($resource){
 
-	return $resource('api/posts', {}, {
-		get: {method: 'GET', isArray: true, withCredentials: true, responseType: 'json'}
-	});
+	return  {
+		posts: $resource('api/posts', {}, {
+			get: {method: 'GET', isArray: true, withCredentials: true, responseType: 'json'}
+		}),
+		postDetails: $resource('api/posts/:postID', {}, {
+			get: {method: 'GET', isArray: false, withCredentials: true, responseType: 'json'}
+		}),
+	};
+}]);
+
+apiServices.factory('$postService', ['$APIService', function($APIService){
+	var posts = null;
+
+	return {
+		getPosts: function() {
+			if (!posts) {
+				posts = $APIService.posts.get();	
+			}
+
+			return posts;
+		}
+	};
+}]);
+
+apiServices.factory('$postDetailService', ['$APIService', function($APIService){
+	var postDetails = [];
+
+	return {
+		getPostDetail: function(postID) {
+			postDetails.forEach(function(postDetail){
+				if (postDetail.id == postID) {
+					return postDetail;
+				}
+			});
+
+			var postDetail = $APIService.postDetails.get({postID: postID});
+			postDetails.push(postDetail);
+			return postDetail;
+		}
+	};
 }]);

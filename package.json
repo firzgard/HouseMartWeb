@@ -13,8 +13,8 @@
   "dependencies": {
     "angular": "1.5.2",
     "angular-resource": "1.5.3",
-    "angular-route": "1.5.3",
     "angular-ui-bootstrap": "1.2.5",
+    "angular-ui-router": "0.2.18",
     "angular-utils-pagination": "0.11.1",
     "body-parser": "~1.0.1",
     "bootstrap": "3.3.6",
@@ -24,7 +24,9 @@
     "jade": "1.11.0",
     "jquery": "2.2.2",
     "jsonwebtoken": "5.7.0",
-    "morgan": "1.7.0"
+    "moment": "2.12.0",
+    "morgan": "1.7.0",
+    "mssql": "3.1.2"
   },
   "author": "Steven Firzen <megafirzen@gmail.com> (http://islashf.net/)",
   "license": "MIT",

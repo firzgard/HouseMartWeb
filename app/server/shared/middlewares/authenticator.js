@@ -3,9 +3,11 @@
 // BASE SETUP
 // ================================================
 
-var	mssql		= require('mssql'),
-	jwt			= require('jsonwebtoken');
+var	jwt			= require('jsonwebtoken'),
+	mssql		= require('mssql');
 
+// Middlewares
+var databaseUtils	= require(makeRootPath('app/server/shared/middlewares/databaseUtils.js'));
 
 module.exports = {
 	authenticate: function(req, res, next) {
@@ -34,7 +36,7 @@ module.exports = {
 							};
 
 							var token = jwt.sign(payload, configs.secret, {
-								expiresIn: '1m'
+								expiresIn: '1h'
 							});
 
 							req.authentication = {
@@ -88,7 +90,7 @@ module.exports = {
 							
 							// Decoded successfully
 							// Retrieve user's authorization from database
-							var queryString		= "SELECT role FROM tbl_Account WHERE username = '" + payload.username 
+							var queryString		= "SELECT id, role FROM tbl_Account WHERE username = '" + payload.username 
 												+ "' AND password = '" + payload.password + "'",
 								mssqlRequestor	= new mssql.Request(mssqlConnector);
 
@@ -99,7 +101,10 @@ module.exports = {
 
 									if(resultSet.length == 1) {
 
-										req.authorization = resultSet[0].role;
+										req.authorization = {
+											userID: resultSet[0].id,
+											role: resultSet[0].role
+										};
 										next();
 									} else {
 										
@@ -124,8 +129,69 @@ module.exports = {
 		} else {
 
 			// No token, authorize user as guest
-			req.authorization = configs.roles.guest;
+			req.authorization = {
+				role: configs.roles.guest
+			};
 			next();
+		}
+	},
+
+	validatePostCreator: function(req, res, next) {
+
+		switch(req.authorization.role) {
+			case configs.roles.guest:
+
+				res.sendStatus(401);
+				break;
+
+			case configs.roles.admin:
+
+				next();
+				break;
+
+			case configs.roles.user:
+				
+				var mssqlConnector = new mssql.Connection(configs.dbConfig);
+
+				mssqlConnector.connect()
+					.then(function(){
+
+						var queryString		= "SELECT creatorID FROM tbl_HouseAndLand WHERE id = " + req.params.postID,
+							mssqlRequestor	= new mssql.Request(mssqlConnector);
+							
+						mssqlRequestor.query(queryString)
+							.then(function(resultSet){
+
+								mssqlConnector.close();
+
+								if(resultSet.length > 0) {
+
+									if(resultSet[0].creatorID == req.authorization.userID){
+										next();
+									} else {
+										res.sendStatus(403);
+									}
+
+									
+								} else {
+									
+									res.status(404).send({message: 'Invalid item ID!!'})
+								}
+							})
+							.catch(function(err){
+
+								mssqlConnector.close();
+								console.log(err);
+								res.sendStatus(500);
+							});
+					})
+					.catch(function(err){
+
+						console.log(err);
+						res.sendStatus(500);
+					});
+
+				break;
 		}
 	}
 };

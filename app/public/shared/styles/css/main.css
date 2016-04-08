@@ -20,7 +20,7 @@
 #posts {
 	padding: 0;
 }
-.post-thumbnail .thumbnail-img img {
+.post-thumbnail .thumbnail-img {
 	height: 100%;
 	max-width: 20em;
 	float: left;

@@ -34,7 +34,7 @@ router.get('/home', authenticator.authorize, function(req, res){
 router.use('/login', routerLogin);
 
 // Register page
-router.use('/signup', authenticator.authorize, routerSignup);
+router.use('/signup', routerSignup);
 
 // Register page
 router.get('/management', authenticator.authorize, function(req, res){
@@ -42,6 +42,6 @@ router.get('/management', authenticator.authorize, function(req, res){
 });
 
 // Route for providing API for android app
-router.use('/api', authenticator.authorize, routerAPI);
+router.use('/api', routerAPI);
 
 module.exports = router;

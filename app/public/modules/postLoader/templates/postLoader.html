@@ -1,10 +1,28 @@
-<div ng-controller="PostLoaderController">
+<div id="post-loader" ng-hide="showDetail" >
+	<div class="paginator-option">
+		<div class="form-group">
+			<label>Order By:</label>
+			<select ng-model="paginator.orderProp" ng-options="opt as opt for opt in paginator.orderOptions" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label>Posts per Page:</label>
+			<select ng-model="paginator.itemsPerPage" ng-options="opt as opt for opt in [5, 6, 7, 8, 9, 10]" class="form-control"></select>
+		</div>
+	</div>
+	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
+
 	<ul id="posts">
-		<li ng-repeat="post in posts | filter:query | orderBy:orderProp" class="post-thumbnail">
-			<a href="#/posts/{{post.id}}" class="thumb"><img ng-src="{{post.imageUrl}}" alt="No Image"></a>
-			<p>{{post.price}}</p>
-			<p>{{post.area}}</p>
-			<p>{{post.description}}</p>
+		<li dir-paginate="post in posts | orderBy: paginator.orderProp | itemsPerPage: paginator.itemsPerPage" pagination-id="post-loader" class="post-thumbnail">
+			<a ui-sref="main.postDetail({postID: post.id})" ng-click="showDetail = ! showDetail">
+				<img class="thumbnail-img" src="assets/shared/imgs/home-icon.png" alt="No Image" />
+				<p>{{post.price}}</p>
+				<p>{{post.area}}</p>
+				<p>{{post.description}}</p>
+			</a>
 		</li>
 	</ul>
+
+	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
 </div>
+
+<div id="post-detail" ui-view ng-show="showDetail"></div>
