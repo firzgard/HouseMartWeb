@@ -13,7 +13,7 @@
 
 	<ul id="posts">
 		<li dir-paginate="post in posts | orderBy: paginator.orderProp | itemsPerPage: paginator.itemsPerPage" pagination-id="post-loader" class="post-thumbnail">
-			<a ui-sref="main.postDetail({postID: post.id})" ng-click="showDetail = ! showDetail">
+			<a ui-sref="main.postDetail({postID: post.postID})" ng-click="showDetail = ! showDetail">
 				<img class="thumbnail-img" src="assets/shared/imgs/home-icon.png" alt="No Image" />
 				<p>{{post.price}}</p>
 				<p>{{post.area}}</p>

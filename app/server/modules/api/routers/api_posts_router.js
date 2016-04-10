@@ -7,7 +7,8 @@ var express 	= require('express');
 
 // Middlewares
 var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js')),
-	databaseUtils	= require(makeRootPath('app/server/shared/middlewares/databaseUtils.js'));
+	databaseUtils	= require(makeRootPath('app/server/shared/middlewares/databaseUtils.js')),
+	paramProcessor	= require(makeRootPath('app/server/modules/api/middlewares/api_paramProcessor.js'));
 
 var router		= express.Router();
 
@@ -20,102 +21,73 @@ router.use(authenticator.authorize);
 
 // Routes for posts API
 router.route('/')
-	// Get/search posts (Access at GET http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][province=(province)][&][district=(district)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]])
-	.get(function(req, res) {
-
-		// Parse isDetailed param
-		if(req.query.isDetailed) {
-			req.query.isDetailed = (req.query.isDetailed.toUpperCase() === 'TRUE');
-		} else {
-			req.query.isDetailed = false;
-		}
-
-		// Check authorization to see whether the requester is allowed to see detailed posts' infos
-		// Admin is allowed by default, so there is no need for checking
-		switch (req.authorization.role) {
-			case configs.roles.user:
-
-				// If the requester is requesting their own posts' details, then allow. If not, set isDetailed to false
-				if(req.query.creatorID && req.query.creatorID == req.authorization.userID) {
-					break;
-				}
-
-			// If requester is a guest, set isDetailed to false
-			case configs.roles.guest:
-
-				req.query.isDetailed = false;
-				break;
-		}
+	// Get/search posts (Access at GET http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]])
+	.get(paramProcessor.posts.get, function(req, res) {
 
 		databaseUtils.posts.get(req.query)
 			.then(function(result){
-				res.json(result.recordSet);
+				return res.json(result.recordSet);
 			})
 			.catch(function(err){
 				if(err.status){
-					res.sendStatus(err.status);
+					return res.sendStatus(err.status);
 				}
-				res.sendStatus(500);
+				return res.sendStatus(500);
 			});
 		
 	})
 	// Post a new post (Access at POST http://(host)[:(port)]/api/posts)
-	.put(function(req, res){
+	.put(paramProcessor.posts.put, function(req, res){
 
-		// Guest is not allowed to post new post
-		if (req.authorization.role == configs.roles.guest) {
-			res.sendStatus(401);
-		} else {
+		databaseUtils.posts.put(req.body)
+			.then(function(result){
+				
+				if (result.rowsAffected > 0) {
 
-			// Check to see whether required params are presented
-			if (req.body.address && req.body.district && req.body.province && req.body.description && req.body.type) {
+					// Update images' url
+					var updateParam = {
+						postID: result.recordSet[0].postID,
+						image1: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image1.jpeg',
+						image2: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image2.jpeg',
+						image3: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image3.jpeg'
+					};
 
-				// Mark time of creation
-				req.body.dateCreate = new Date().toUTCString();
-				req.body.dateUpdate = req.body.dateCreate;
-				// Mark creator ID
-				req.body.creatorID = req.authorization.userID;
-				req.body.updatorID = req.authorization.userID;
+					databaseUtils.posts.postDetail.patch(updateParam)
+						.then(function(result){
 
-				databaseUtils.posts.put(req.body)
-					.then(function(result){
-						
-						if (result.rowsAffected > 0) {
-							res.sendStatus(201);
-						} else {
-							res.sendStatus(409);
-						}
-					})
-					.catch(function(err){
+							if(result.rowsAffected > 0) {
+								return res.status(201).json({postID: updateParam.postID});
+							} else {
+								return res.sendStatus(202);
+							}
+						})
+						.catch(function(err){
+							
+							if (err.status) {
+								return res.sendStatus(err.status);
+							}
 
-						if(err.status){
-							res.sendStatus(err.status);
-						}
-						res.sendStatus(500);
-					});
-			} else {
-				res.sendStatus(501);
-			}
-		}
+							return res.sendStatus(500);
+						});
+
+				} else {
+					return res.sendStatus(409);
+				}
+			})
+			.catch(function(err){
+
+				if(err.status){
+					return res.sendStatus(err.status);
+				}
+				return res.sendStatus(500);
+			});
 	});
 
 
 // Routes for postDetail API
 router.route('/:postID')
 	// Get 1 post's detailed infos (Access at GET http://(host)[:(port)]/api/posts/(postID)[?[isDetailed=(isDetailed)]])
-	.get(function(req, res) {
-
-		// Parse isDetailed param
-		if(req.query.isDetailed) {
-			req.query.isDetailed = (req.query.isDetailed.toUpperCase() === 'TRUE');
-		}
-
-		// Check authorization to see whether the requester is allowed to see detailed posts' infos
-		// Admin is allowed by default, so there is no need for checking
-		// User is checked later
-		if (req.authorization.role == configs.roles.guest) {
-			req.query.isDetailed = false;
-		}
+	.get(paramProcessor.posts.postDetail.get, function(req, res) {
 
 		databaseUtils.posts.postDetail.get(req.params)
 			.then(function(result){
@@ -135,74 +107,61 @@ router.route('/:postID')
 						delete result.recordSet[0].updatorName;
 					}
 
-					res.json(result.recordSet[0]);
+					return res.json(result.recordSet[0]);
 				} else {
-					res.status(404).send({message: 'Invalid ID'});
+					return res.status(404).send({message: 'Invalid ID'});
 				}
 			})
 			.catch(function(err){
 
 				if(err.status) {
-					res.sendStatus(err.status);
+					return res.sendStatus(err.status);
 				}
-				res.sendStatus(500);
+				return res.sendStatus(500);
 			});
 	})
 	// Edit 1 post (Access at POST http://(host)[:(port)]/api/posts/(postID))
-	.patch(authenticator.validatePostCreator, function(req, res){
+	.patch(authenticator.validatePostCreator, paramProcessor.posts.postDetail.patch, function(req, res){
 
-		// Check to see whether all required params are presenting
-		if (req.body.address && req.body.district && req.body.province && req.body.description && req.body.type) {
+		databaseUtils.posts.postDetail.patch(req.body)
+			.then(function(result){
 
-				// Get post ID
-				req.body.postID = req.params.postID;
-				// Record updating time
-				req.body.dateUpdate = new Date().toUTCString();
-				// Record updator ID
-				req.body.updatorID = req.authorization.userID;
+				if(result.rowsAffected > 0) {
+					return res.sendStatus(200);
+				} else {
+					return res.sendStatus(202);
+				}
+			})
+			.catch(function(err){
+				
+				if (err.status) {
+					return res.sendStatus(err.status);
+				}
 
-				databaseUtils.posts.postDetail.patch(req.body)
-				.then(function(result){
+				return res.sendStatus(500);
+			});
 
-					if(result.rowsAffected > 0) {
-						res.sendStatus(200);
-					} else {
-						res.sendStatus(400);
-					}
-				})
-				.catch(function(err){
-					
-					if (err.status) {
-						res.sendStatus(err.status);
-					}
-
-					res.sendStatus(500);
-				});
-
-			} else {
-				res.sendStatus(501);
-			}
 	})
 	// Delete 1 post (Access at DELETE http://(host)[:(port)]/api/posts/(postID))
-	.delete(authenticator.validatePostCreator, function(req, res){
+	.delete(authenticator.validatePostCreator, paramProcessor.posts.postDetail.delete, function(req, res){
 
 		databaseUtils.posts.postDetail.delete(req.params)
 			.then(function(result){
 
 				if(result.rowsAffected > 0) {
 
-					res.sendStatus(200);
+					return res.sendStatus(200);
 				} else {
-					res.sendStatus(400);
+					return res.sendStatus(202);
 				}
 			})
 			.catch(function(err){
 
 				if (err.status) {
-					res.sendStatus(err.status);
+					return res.sendStatus(err.status);
 				}
 
-				res.sendStatus(500);
+				return res.sendStatus(500);
 			});
 	});
 

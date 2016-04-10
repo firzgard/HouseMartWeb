@@ -21,7 +21,7 @@ postLoaderControllers.controller('PostDetailController', ['$scope', '$state', '$
 	function($scope, $state, $stateParams, $postDetailService){
 
 		$scope.$parent.showDetail = true;
-		$scope.postID = $postDetailService.getPostDetail($stateParams.postID);
+		$scope.postDetail = $postDetailService.getPostDetail($stateParams.postID);
 
 		$scope.goBack = function() {
 			$scope.$parent.showDetail = false;

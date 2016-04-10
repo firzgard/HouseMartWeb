@@ -36,7 +36,7 @@ apiServices.factory('$postDetailService', ['$APIService', function($APIService){
 	return {
 		getPostDetail: function(postID) {
 			postDetails.forEach(function(postDetail){
-				if (postDetail.id == postID) {
+				if (postDetail.postID == postID) {
 					return postDetail;
 				}
 			});

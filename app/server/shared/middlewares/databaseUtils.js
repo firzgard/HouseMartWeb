@@ -5,23 +5,20 @@
 
 var mssql		= require('mssql');
 
-// Datafields allowed in query statement based on authorization
+// Datafields for query statements
 var	dataFields = {
 	create: {
 		post: {
-			columns: 'ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate, creatorID, updatorID',
-			params: '@ownerName, @address, @district, @province, @phone, @description, @area, @price, @type, @dateCreate, @dateUpdate, @creatorID, @updatorID'
+			columns: 'ownerName, address, districtID, phone, description, area, price, type, latitude, longitude, isPublic, dateCreate, dateUpdate, creatorID, updatorID',
+			params: '@ownerName, @address, @districtID, @phone, @description, @area, @price, @type, @latitude, @longitude, @isPublic, @dateCreate, @dateUpdate, @creatorID, @updatorID'
 		}
-	},
-	update: {
-		post: 'ownerName=@ownerName, address=@address, district=@district, province=@province, phone=@phone, description=@description, area=@area, price=@price, type=@type, dateUpdate=@dateUpdate, updatorID=@updatorID'
 	},
 	retrieve: {
 		posts: {
-			normal: 'id AS postsID, ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate',
-			detailed: 'posts.ID AS postsID, ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
+			normal: 'id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, dateCreate, dateUpdate',
+			detailed: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		},
-		postDetail: 'posts.ID AS postsID, ownerName, address, district, province, phone, description, area, price, type, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
+		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 	}
 };
 
@@ -40,10 +37,12 @@ var generateStatement = {
 
 			if (isDetailed) {
 				statement += dataFields.retrieve.posts.detailed
-						+ ' FROM tbl_HouseAndLand AS Posts, tbl_Account AS Creators, tbl_Account AS Updators'
-						+ ' WHERE Posts.creatorID = Creators.id AND Posts.updatorID = Updators.id';
+						+ ' FROM tbl_HouseAndLand AS Posts, tbl_Account AS Creators, tbl_Account AS Updators, tbl_Districts AS Districts, tbl_Provinces AS Provinces'
+						+ ' WHERE Posts.creatorID = Creators.id AND Posts.updatorID = Updators.id AND Posts.districtID = Districts.districtID AND Provinces.provinceID = Districts.provinceID';
 			} else {
-				statement += dataFields.retrieve.posts.normal + ' FROM tbl_HouseAndLand';
+				statement += dataFields.retrieve.posts.normal
+						+ ' FROM tbl_HouseAndLand AS Posts, tbl_Districts AS Districts, tbl_Provinces AS Provinces'
+						+ ' WHERE Posts.districtID = Districts.districtID AND Provinces.provinceID = Districts.provinceID AND isPublic = 1';
 			}
 
 			// Get array of available params' keywords
@@ -51,11 +50,7 @@ var generateStatement = {
 
 			if (paramKeys.length > 0) {
 
-				if (isDetailed) {
-					statement += ' AND ';
-				} else {
-					statement += ' WHERE ';
-				}
+				statement += ' AND ';
 
 				for (var i = 0, length = paramKeys.length; i < length; i++) {
 
@@ -66,23 +61,24 @@ var generateStatement = {
 					switch(paramKeys[i]) {
 
 						case 'maxPrice':
-							statement += 'price <= @' + paramKeys[i];
+							statement += 'price <= @maxPrice';
 							break;
 
 						case 'maxArea':
-							statement += 'area <= @' + paramKeys[i];
+							statement += 'area <= @maxArea';
 							break;
 
 						case 'minPrice':
-							statement += 'price >= @' + paramKeys[i];
+							statement += 'price >= @minPrice';
 							break;
 
 						case 'minArea':
-							statement += 'area >= @' + paramKeys[i];
+							statement += 'area >= @minArea';
 							break;
 
-						default:
-							statement += paramKeys[i] + ' = @' + paramKeys[i];
+						case 'creatorID':
+						case 'districtID':
+							statement += 'Posts.' + paramKeys[i] + ' = @' + paramKeys[i];
 					}
 				}
 			}
@@ -92,22 +88,41 @@ var generateStatement = {
 
 		put: function() {
 			return 'INSERT INTO tbl_HouseAndLand (' + dataFields.create.post.columns + ')'
-				+ ' VALUES (' + dataFields.create.post.params + ')';
+				+ ' VALUES (' + dataFields.create.post.params + '); SELECT SCOPE_IDENTITY() AS postID';
 		},
 
 		postDetail: {
 			get: function() {
 				return 'SELECT ' + dataFields.retrieve.postDetail
-					+ ' FROM tbl_HouseAndLand AS Posts, tbl_Account AS Creators, tbl_Account AS Updators'
-					+ ' WHERE Posts.creatorID = Creators.id AND Posts.updatorID = Updators.id AND Posts.id = @postID';
+					+ ' FROM tbl_HouseAndLand AS Posts, tbl_Account AS Creators, tbl_Account AS Updators, tbl_Districts AS Districts, tbl_Provinces AS Provinces'
+					+ ' WHERE Posts.creatorID = Creators.id AND Posts.updatorID = Updators.id AND Posts.districtID = Districts.districtID AND Provinces.provinceID = Districts.provinceID AND Posts.id = @postID';
 			},
-			patch: function() {
+			patch: function(params) {
+				
+				var updateFields = '';
+
+				// Get array of available params' keywords (postID not included)
+				var paramKeys = Object.keys(params);
+				paramKeys.splice(paramKeys.indexOf('postID'), 1);
+
+				if (paramKeys.length > 0) {
+
+					for (var i = 0, length = paramKeys.length, limit = length-1; i < length; i++) {
+
+						updateFields += paramKeys[i] + '=@' + paramKeys[i];
+
+						if (i != limit) {
+							updateFields += ', ';
+						}
+					}
+				}
+
 				return 'UPDATE tbl_HouseAndLand'
-					+ ' SET ' + dataFields.update.post
+					+ ' SET ' + updateFields
 					+ ' WHERE id = @postID';
 			},
 			delete: function() {
-				return 'DELETE FROM tbl_HouseAndLand WHERE id = @postID';
+				return 'DELETE FROM tbl_HouseAndLand WHERE id = @postID; SELECT SCOPE_IDENTITY() AS postID';
 			}
 		}
 	}
@@ -118,25 +133,25 @@ var injectParams = {
 	posts: {
 		get: function(preparedStatement, params) {
 			
-			if (params.creatorID) {
+			if (typeof params.creatorID !== 'undefined') {
 				preparedStatement.input('creatorID', mssql.Int);
 			}
-			if (params.district) {
-				preparedStatement.input('district', mssql.NVarChar(50));
+			if (typeof params.districtName !== 'undefined') {
+				preparedStatement.input('districtName', mssql.NVarChar(50));
 			}
-			if (params.province) {
-				preparedStatement.input('province', mssql.NVarChar(50));
+			if (typeof params.provinceName !== 'undefined') {
+				preparedStatement.input('provinceName', mssql.NVarChar(50));
 			}
-			if (params.minPrice) {
+			if (typeof params.minPrice !== 'undefined') {
 				preparedStatement.input('minPrice', mssql.Decimal(19, 3));
 			}
-			if (params.maxPrice) {
+			if (typeof params.maxPrice !== 'undefined') {
 				preparedStatement.input('maxPrice', mssql.Decimal(19, 3));
 			}
-			if (params.minArea) {
+			if (typeof params.minArea !== 'undefined') {
 				preparedStatement.input('minArea', mssql.Decimal(19, 3));
 			}
-			if (params.maxArea) {
+			if (typeof params.maxArea !== 'undefined') {
 				preparedStatement.input('maxArea', mssql.Decimal(19, 3));
 			}
 
@@ -146,13 +161,15 @@ var injectParams = {
 
 			preparedStatement.input('ownerName', mssql.NVarChar(60));
 			preparedStatement.input('address', mssql.NVarChar(150));
-			preparedStatement.input('district', mssql.NVarChar(50));
-			preparedStatement.input('province', mssql.NVarChar(50));
+			preparedStatement.input('districtID', mssql.NVarChar(50));
 			preparedStatement.input('phone', mssql.NVarChar(20));
 			preparedStatement.input('description', mssql.NVarChar(1000));
 			preparedStatement.input('area', mssql.Decimal(19, 3));
 			preparedStatement.input('price', mssql.Decimal(19, 3));
 			preparedStatement.input('type', mssql.Int);
+			preparedStatement.input('longitude', mssql.Decimal(9, 6));
+			preparedStatement.input('latitude', mssql.Decimal(9, 6));
+			preparedStatement.input('isPublic', mssql.Bit);
 			preparedStatement.input('dateCreate', mssql.DateTime2(0));
 			preparedStatement.input('dateUpdate', mssql.DateTime2(0));
 			preparedStatement.input('creatorID', mssql.Int);
@@ -166,20 +183,59 @@ var injectParams = {
 				preparedStatement.input('postID', mssql.Int);
 				return preparedStatement;
 			},
-			patch: function(preparedStatement) {
+			patch: function(preparedStatement, params) {
 
-				preparedStatement.input('postID', mssql.Int);
-				preparedStatement.input('ownerName', mssql.NVarChar(60));
-				preparedStatement.input('address', mssql.NVarChar(150));
-				preparedStatement.input('district', mssql.NVarChar(50));
-				preparedStatement.input('province', mssql.NVarChar(50));
-				preparedStatement.input('phone', mssql.NVarChar(20));
-				preparedStatement.input('description', mssql.NVarChar(1000));
-				preparedStatement.input('area', mssql.Decimal(19, 3));
-				preparedStatement.input('price', mssql.Decimal(19, 3));
-				preparedStatement.input('type', mssql.Int);
-				preparedStatement.input('dateUpdate', mssql.DateTime2(0));
-				preparedStatement.input('updatorID', mssql.Int);
+				if (typeof params.postID !== 'undefined') {
+					preparedStatement.input('postID', mssql.Int);
+				}
+				if (typeof params.ownerName !== 'undefined') {
+					preparedStatement.input('ownerName', mssql.NVarChar(60));
+				}
+				if (typeof params.address !== 'undefined') {
+					preparedStatement.input('address', mssql.NVarChar(150));
+				}
+				if (typeof params.districtID !== 'undefined') {
+					preparedStatement.input('districtID', mssql.NVarChar(50));
+				}
+				if (typeof params.phone !== 'undefined') {
+					preparedStatement.input('phone', mssql.NVarChar(20));
+				}
+				if (typeof params.description !== 'undefined') {
+					preparedStatement.input('description', mssql.NVarChar(1000));
+				}
+				if (typeof params.area !== 'undefined') {
+					preparedStatement.input('area', mssql.Decimal(19, 3));
+				}
+				if (typeof params.price !== 'undefined') {
+					preparedStatement.input('price', mssql.Decimal(19, 3));
+				}
+				if (typeof params.type !== 'undefined') {
+					preparedStatement.input('type', mssql.Int);
+				}
+				if (typeof params.longitude !== 'undefined') {
+					preparedStatement.input('longitude', mssql.Decimal(9, 6));
+				}
+				if (typeof params.latitude !== 'undefined') {
+					preparedStatement.input('latitude', mssql.Decimal(9, 6));
+				}
+				if (typeof params.image1 !== 'undefined') {
+					preparedStatement.input('image1', mssql.NVarChar(200));
+				}
+				if (typeof params.image2 !== 'undefined') {
+					preparedStatement.input('image2', mssql.NVarChar(200));
+				}
+				if (typeof params.image3 !== 'undefined') {
+					preparedStatement.input('image3', mssql.NVarChar(200));
+				}
+				if (typeof params.isPublic !== 'undefined') {
+					preparedStatement.input('isPublic', mssql.Bit);
+				}
+				if (typeof params.dateUpdate !== 'undefined') {
+					preparedStatement.input('dateUpdate', mssql.DateTime2(0));
+				}
+				if (typeof params.updatorID !== 'undefined') {
+					preparedStatement.input('updatorID', mssql.Int);
+				}
 
 				return preparedStatement;
 			},
@@ -247,7 +303,7 @@ var execute = function(injectParams, statement, params) {
 
 						mssqlConnector.close();
 						console.log(err);
-						err.status = 500;
+						err.status = 409;
 						reject(err);
 					});
 			})
@@ -311,7 +367,7 @@ module.exports = {
 				return execute(injectParams.posts.postDetail.get, generateStatement.posts.postDetail.get(), params);
 			},
 			patch: function (params) {
-				return execute(injectParams.posts.postDetail.patch, generateStatement.posts.postDetail.patch(), params);
+				return execute(injectParams.posts.postDetail.patch, generateStatement.posts.postDetail.patch(params), params);
 			},
 			delete: function (params) {
 				return execute(injectParams.posts.postDetail.delete, generateStatement.posts.postDetail.delete(), params);

@@ -1,40 +1,52 @@
 #HouseMart Webapp
 
-###GOALS:
+##Business Idea:
+This project is the web-module of a real estate advertisement posting/browsing solution, which includes a web server, a website and a REST API-consumming Android native app.  
 
-####Archieved:
-* Interact with sqlserver database on express app (mssql)
+This project includes the web server and the website.
+
+##Training purpose:
+An experimental SEAN  web application (**S**ql Server, **E**xpress.js, **A**ngularJS, **N**ode.js). This project is my attemmpt to approach JavaScript (semi-)full-stack development, with Sql Server, Express.js, AngularJS, and Node.js at it's core.  
+
+The secondary target is to learn by integrating as many different techniques and technologies into the project as possible.
+
+###Goals:
+#### - Archieved:
+* Interact with sqlserver database from express app (mssql)
 * Use bootstrap3 with angular directive (angular ui-bootstrap)
 * Implement angular nested state/view (angular ui-router)
 * Implement authentication using Json Web Token
 * Replace callbacks in favour of promises
 
-####Unfulfilled:
+#### - Unfulfilled:
 * Implement google map
+* Server-side pagination
+* File uploading
 * Separation of dev/test/dist environment
 * Automatic testing
 * Fine-tune dist environment
   * Uglifiy, minify, compressing resources
+  * Server Logging
+
+##Usage Guideline:
 
 ###API ROUTES:
 
 #### Create post (User/Admin)  
 `http://(host)[:(port)]/api/posts (POST)`
 ####  Get/search all posts with general infos (Guest/User/Admin)  
-`http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][province=(province)][&][district=(district)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
-Supported query params include:  
-| Keyword       | Expected Type   | Note            |
-| ------------- | --------------- | --------------- |
-| creatorID     | Integer         | If equals userID, then allow viewing setting isDetailed flag |
-| province      | String          |                 |
-| district      | String          |                 |
-| minPrice      | Float           |                 |
-| maxPrice      | Float           |                 |
-| minArea       | Float           |                 |
-| maxArea       | Float           |                 |
-| isDetailed    | Boolean         | Default is false. If allowed to set and is setted to true, then show hidden details |
+`http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
+#####Supported query params include:  
+  * creatorID (Integer): If equals userID, then allow viewing setting isDetailed flag.
+  * districtID (Integer)
+  * minPrice (Float)
+  * maxPrice (Float)
+  * minArea (Float)
+  * maxArea (Float)
+  * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
+  
 ####  Get 1 post with detailed infos (Guest/User/Admin)  
-`http://(host)[:(port)]/api/posts/(postID) (GET)`
+`http://(host)[:(port)]/api/posts/(postID)[?isDetailed=(isDetailed)] (GET)`
 ####  Update 1 post (User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID) (POST)`
 #### Delete 1 post (User/Admin)  
