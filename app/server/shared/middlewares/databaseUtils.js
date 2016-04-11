@@ -9,16 +9,16 @@ var mssql		= require('mssql');
 var	dataFields = {
 	create: {
 		post: {
-			columns: 'ownerName, address, districtID, phone, description, area, price, type, latitude, longitude, isPublic, dateCreate, dateUpdate, creatorID, updatorID',
-			params: '@ownerName, @address, @districtID, @phone, @description, @area, @price, @type, @latitude, @longitude, @isPublic, @dateCreate, @dateUpdate, @creatorID, @updatorID'
+			columns: 'ownerName, address, districtID, title, phone, description, area, price, type, latitude, longitude, isPublic, dateCreate, dateUpdate, creatorID, updatorID',
+			params: '@ownerName, @address, @districtID, @title, @phone, @description, @area, @price, @type, @latitude, @longitude, @isPublic, @dateCreate, @dateUpdate, @creatorID, @updatorID'
 		}
 	},
 	retrieve: {
 		posts: {
-			normal: 'id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, dateCreate, dateUpdate',
-			detailed: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
+			normal: 'id AS postID, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, area, price, type, image1, image2, image3, dateCreate, dateUpdate',
+			detailed: 'posts.id AS postID, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, area, price, type, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		},
-		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, phone, description, area, price, type, latitude, longitude, image1, image2, image3, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
+		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 	}
 };
 
@@ -162,6 +162,7 @@ var injectParams = {
 			preparedStatement.input('ownerName', mssql.NVarChar(60));
 			preparedStatement.input('address', mssql.NVarChar(150));
 			preparedStatement.input('districtID', mssql.NVarChar(50));
+			preparedStatement.input('title', mssql.NVarChar(50));
 			preparedStatement.input('phone', mssql.NVarChar(20));
 			preparedStatement.input('description', mssql.NVarChar(1000));
 			preparedStatement.input('area', mssql.Decimal(19, 3));
@@ -196,6 +197,9 @@ var injectParams = {
 				}
 				if (typeof params.districtID !== 'undefined') {
 					preparedStatement.input('districtID', mssql.NVarChar(50));
+				}
+				if (typeof params.title !== 'undefined') {
+					preparedStatement.input('title', mssql.NVarChar(50));
 				}
 				if (typeof params.phone !== 'undefined') {
 					preparedStatement.input('phone', mssql.NVarChar(20));

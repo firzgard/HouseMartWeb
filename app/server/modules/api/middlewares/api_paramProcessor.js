@@ -77,7 +77,7 @@ module.exports = {
 
 			// Check whether all required params are presented and is in correct type
 			{
-				if(typeof req.body.address === 'undefined') {
+				if(typeof req.body.address === 'undefined' || req.body.address.length > 150) {
 					return res.sendStatus(400);
 				}
 
@@ -90,7 +90,7 @@ module.exports = {
 					}
 				}
 
-				if(typeof req.body.description === 'undefined') {
+				if(typeof req.body.title === 'undefined' || req.body.title.length > 50) {
 					return res.sendStatus(400);
 				}
 				
@@ -106,9 +106,20 @@ module.exports = {
 
 			// Check unrequired params
 			{
+				if(typeof req.body.ownerName !== 'undefined') {
+					if (req.body.ownerName.length > 60) {
+						return res.sendStatus(400);
+					}
+				}
+					
 				if(typeof req.body.phone !== 'undefined') {
-					req.body.phone = Number.parseInt(req.body.phone, 10);
-					if(Number.isNaN(req.body.phone)) {
+					if(req.body.phone.length > 20) {
+						return res.sendStatus(400);
+					}
+				}
+
+				if(typeof req.body.description !== 'undefined') {
+					if(req.body.description.length > 1000) {
 						return res.sendStatus(400);
 					}
 				}
@@ -204,9 +215,28 @@ module.exports = {
 
 				// Check unrequired params
 				{
+					if(typeof req.body.ownerName !== 'undefined') {
+						if (req.body.ownerName.length > 60) {
+							return res.sendStatus(400);
+						}
+					}
+
+					if(typeof req.body.address !== 'undefined') {
+						if (req.body.address.length > 150) {
+							return res.sendStatus(400);
+						}
+					}
+
+
 					if(typeof req.body.districtID !== 'undefined') {
 						req.body.districtID = Number.parseInt(req.body.districtID, 10);
 						if (Number.isNaN(req.query.districtID)) {
+							return res.sendStatus(400);
+						}
+					}
+
+					if(typeof req.body.title !== 'undefined') {
+						if (req.body.title.length > 50) {
 							return res.sendStatus(400);
 						}
 					}
@@ -218,9 +248,14 @@ module.exports = {
 						}
 					}
 
+					if(typeof req.body.description !== 'undefined') {
+						if(req.body.description.length > 1000) {
+							return res.sendStatus(400);
+						}
+					}
+
 					if(typeof req.body.phone !== 'undefined') {
-						req.body.phone = Number.parseInt(req.body.phone, 10);
-						if(Number.isNaN(req.body.phone)) {
+						if(req.body.phone.length > 20) {
 							return res.sendStatus(400);
 						}
 					}

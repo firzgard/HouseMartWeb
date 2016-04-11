@@ -22,6 +22,7 @@ The secondary target is to learn by integrating as many different techniques and
 * Implement google map
 * Server-side pagination
 * File uploading
+* Apply CSS preprocessor
 * Separation of dev/test/dist environment
 * Automatic testing
 * Fine-tune dist environment
@@ -34,9 +35,11 @@ The secondary target is to learn by integrating as many different techniques and
 
 #### Create post (User/Admin)  
 `http://(host)[:(port)]/api/posts (POST)`
+
 ####  Get/search all posts with general infos (Guest/User/Admin)  
 `http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
-#####Supported query params include:  
+
+#####Supported query params:  
   * creatorID (Integer): If equals userID, then allow viewing setting isDetailed flag.
   * districtID (Integer)
   * minPrice (Float)
@@ -44,9 +47,125 @@ The secondary target is to learn by integrating as many different techniques and
   * minArea (Float)
   * maxArea (Float)
   * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
+
+#####Returned json file structure:
+######*Without* flagged isDetailed:
+```javascript
+[
+    {
+        "postID": (Integer),
+        "address": (String),
+        "districtID": (Integer),
+        "districtName": (String),
+        "provinceID": (Integer),
+        "provinceName": (String),
+        "title": (String),
+        "area": (Float),
+        "price": (Float),
+        "type": (Integer),
+        "image1": (String),
+        "image2": (String),
+        "image3": (String),
+        "dateCreate": (UTC Date),
+        "dateUpdate": (UTC Date)
+    },
+    ...
+]
+```
+
+######*With* flagged isDetailed:
+```javascript
+[
+    {
+        "postID": (Integer),
+        "address": (String),
+        "districtID": (Integer),
+        "districtName": (String),
+        "provinceID": (Integer),
+        "provinceName": (String),
+        "title": (String),
+        "area": (Float),
+        "price": (Float),
+        "type": (Integer),
+        "image1": (String),
+        "image2": (String),
+        "image3": (String),
+        "isPublic": (Boolean),
+        "dateCreate": (UTC Date),
+        "dateUpdate": (UTC Date),
+        "creatorID": (Integer),
+        "creatorName": (String),
+        "updatorID": (Integer),
+        "updatorName": (String)
+    },
+    ...
+]
+```
   
 ####  Get 1 post with detailed infos (Guest/User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID)[?isDetailed=(isDetailed)] (GET)`
+
+#####Supported query params:  
+  * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
+
+#####Returned json file structure:
+######*Without* flagged isDetailed:
+```javascript
+{
+    "postID": (Integer),
+    "ownerName": (String),
+    "address": (String),
+    "districtID": (Integer),
+    "districtName": (String),
+    "provinceID": (Integer),
+    "provinceName": (String),
+    "title": (String),
+    "phone": (String),
+    "description": (String),
+    "area": (Float),
+    "price": (Float),
+    "type": (Integer),
+    "latitude": (Float),
+    "longitude": (Float),
+    "image1": (String),
+    "image2": (String),
+    "image3": (String),
+    "dateCreate": (UTC Date),
+    "dateUpdate": (UTC Date)
+}
+```
+
+######*With* flagged isDetailed:
+```javascript
+{
+    "postID": (Integer),
+    "ownerName": (String),
+    "address": (String),
+    "districtID": (Integer),
+    "districtName": (String),
+    "provinceID": (Integer),
+    "provinceName": (String),
+    "title": (String),
+    "phone": (String),
+    "description": (String),
+    "area": (Float),
+    "price": (Float),
+    "type": (Integer),
+    "latitude": (Float),
+    "longitude": (Float),
+    "image1": (String),
+    "image2": (String),
+    "image3": (String),
+    "isPublic": (Boolean),
+    "dateCreate": (UTC Date),
+    "dateUpdate": (UTC Date),
+    "creatorID": (Integer),
+    "creatorName": (String),
+    "updatorID": (Integer),
+    "updatorName": (String)
+}
+```
+
 ####  Update 1 post (User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID) (POST)`
 #### Delete 1 post (User/Admin)  
