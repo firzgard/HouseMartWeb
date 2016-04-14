@@ -7,8 +7,8 @@ var houseMart = angular.module('HouseMart', [
 	'ui.router',
 	'angularUtils.directives.dirPagination',
 	'dcbImgFallback' ,
-	'PostLoaderControllers',
-	'EmptyToEndFilter',
+	'HouseMart.PostLoaderControllers',
+	'HouseMart.EmptyToEndFilter',
 	'HouseMart.APIServices'
 ]);
 
@@ -23,7 +23,7 @@ houseMart.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
 			controller: 'PostLoaderController'
 		})
 		.state('main.postDetail', {
-			url: "/posts/{postID:int}",
+			url: "posts/{postID:int}",
 			parent: 'main',
 			templateUrl: "/assets/modules/postLoader/templates/postDetail.html",
 			controller: 'PostDetailController'

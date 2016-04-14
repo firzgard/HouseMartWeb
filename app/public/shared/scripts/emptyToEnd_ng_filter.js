@@ -2,7 +2,7 @@
 
 // postLoader angular controller module
 
-var emptyToEndFilter = angular.module('EmptyToEndFilter', []);
+var emptyToEndFilter = angular.module('HouseMart.EmptyToEndFilter', []);
 
 emptyToEndFilter.filter("emptyToEnd", function () {
 

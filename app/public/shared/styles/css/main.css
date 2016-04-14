@@ -2,8 +2,23 @@
 	display: none !important;
 }
 
+#side-bar {
+	padding: 1em 1em 1em 1em;
+	margin-bottom: 3em;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 10px 20px hsla(0, 0%, 0%, 0.2);
+}
+
+.sticky-side-bar {
+	position: fixed;
+	top: 1em;
+}
+
 #content-container {
 	padding: 2em 4em 2em 4em;
+	margin-bottom: 3em;
 	border: 1px solid #ddd;
+	border-radius: 4px;
 	box-shadow: 0 10px 20px hsla(0, 0%, 0%, 0.2);
 }

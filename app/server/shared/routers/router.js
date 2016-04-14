@@ -26,7 +26,7 @@ router.get('/', authenticator.authorize, function(req, res){
 });
 
 // homepage
-router.get('/home', function(req, res){
+router.get('/home', authenticator.authorize, function(req, res){
 	res.render(makeRootPath('app/server/modules/home/templates/home.jade'), req.authorization);
 });
 

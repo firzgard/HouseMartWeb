@@ -221,8 +221,33 @@ The secondary target is to learn as many different techniques and technologies b
 #### Delete 1 user (Admin)  
 `http://(host)[:(port)]/api/users/(userID) (DELETE)`
   
-#### Get all post of a user with general infos (User/Admin)  
-`http://(host)[:(port)]/api/users/(userID)/posts (GET)`
+#### Get province list (Guest/User/Admin)  
+`http://(host)[:(port)]/api/provinces (GET)`
+#####Returned json file structure:
+```javascript
+[
+    {
+        "provinceID": (Integer),
+        "provinceName": (String)
+    },
+    ...
+]
+```
+  
+#### Get district list (Guest/User/Admin)  
+`http://(host)[:(port)]/api/districts (GET)`
+#####Returned json file structure:
+```javascript
+[
+    {
+        "districtID": (Integer),
+        "districtName": (String),
+        "provinceID": (Integer),
+        "provinceName": (String)
+    },
+    ...
+]
+```
   
 #### Authenticate non-web user (Guest):  
 `http://(host)[:(port)]/api/authenticate) (POST)`

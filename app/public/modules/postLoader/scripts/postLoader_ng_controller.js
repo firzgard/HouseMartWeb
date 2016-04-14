@@ -2,7 +2,7 @@
 
 // postLoader angular controller module
 
-var postLoaderControllers = angular.module('PostLoaderControllers', []);
+var postLoaderControllers = angular.module('HouseMart.PostLoaderControllers', []);
 
 postLoaderControllers.controller('PostLoaderController', ['$scope', '$postService',
 	function($scope, $postService){

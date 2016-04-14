@@ -19,7 +19,7 @@ var	dataFields = {
 			detailed: 'posts.id AS postID, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, area, price, type, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		},
 		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName',
-		districts: 'districtID, districtName',
+		districts: 'districtID, districtName, Provinces.provinceID AS provinceID, provinceName',
 		provinces: 'provinceID, provinceName'
 	}
 };
@@ -141,7 +141,7 @@ var generateStatement = {
 	districts:{
 		get: function() {
 			return 'SELECT ' + dataFields.retrieve.districts
-				+ ' FROM tbl_Districts';
+				+ ' FROM tbl_Districts AS Districts, tbl_Provinces AS Provinces';
 		}
 	},
 	provinces: {

@@ -25,7 +25,8 @@
     "jquery": "2.2.2",
     "jsonwebtoken": "5.7.0",
     "morgan": "1.7.0",
-    "mssql": "3.1.2"
+    "mssql": "3.1.2",
+    "waypoints": "4.0.0"
   },
   "author": "Steven Firzen <megafirzen@gmail.com> (http://islashf.net/)",
   "license": "MIT",

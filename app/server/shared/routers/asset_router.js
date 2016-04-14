@@ -24,6 +24,8 @@ router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modul
 router.use('/libs/angular-utils-pagination', express.static(makeRootPath('node_modules/angular-utils-pagination')));
 router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstrap/dist')));
 router.use('/libs/jquery', express.static(makeRootPath('node_modules/jquery/dist')));
+router.use('/libs/waypoints', express.static(makeRootPath('node_modules/waypoints/lib')));
+
 
 // Route for providing static assets
 router.use('/', express.static(makeRootPath('app/public')));
