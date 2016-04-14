@@ -18,7 +18,9 @@ var	dataFields = {
 			normal: 'id AS postID, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, area, price, type, image1, image2, image3, dateCreate, dateUpdate',
 			detailed: 'posts.id AS postID, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, area, price, type, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
 		},
-		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName'
+		postDetail: 'posts.id AS postID, ownerName, address, Districts.districtID AS districtID, Districts.districtName AS districtName, Provinces.provinceID AS provinceID, Provinces.provinceName AS provinceName, title, phone, description, area, price, type, latitude, longitude, image1, image2, image3, isPublic, dateCreate, dateUpdate, creatorID, Creators.username AS creatorName, updatorID, Updators.username AS updatorName',
+		districts: 'districtID, districtName',
+		provinces: 'provinceID, provinceName'
 	}
 };
 
@@ -64,12 +66,12 @@ var generateStatement = {
 							statement += 'price <= @maxPrice';
 							break;
 
-						case 'maxArea':
-							statement += 'area <= @maxArea';
-							break;
-
 						case 'minPrice':
 							statement += 'price >= @minPrice';
+							break;
+
+						case 'maxArea':
+							statement += 'area <= @maxArea';
 							break;
 
 						case 'minArea':
@@ -77,8 +79,16 @@ var generateStatement = {
 							break;
 
 						case 'creatorID':
-						case 'districtID':
 							statement += 'Posts.' + paramKeys[i] + ' = @' + paramKeys[i];
+							break;
+
+						case 'districtID':
+							statement += 'Districts.' + paramKeys[i] + ' = @' + paramKeys[i];
+							break;
+
+						case 'provinceID':
+							statement += 'Provinces.' + paramKeys[i] + ' = @' + paramKeys[i];
+							break;
 					}
 				}
 			}
@@ -98,7 +108,7 @@ var generateStatement = {
 					+ ' WHERE Posts.creatorID = Creators.id AND Posts.updatorID = Updators.id AND Posts.districtID = Districts.districtID AND Provinces.provinceID = Districts.provinceID AND Posts.id = @postID';
 			},
 			patch: function(params) {
-				
+
 				var updateFields = '';
 
 				// Get array of available params' keywords (postID not included)
@@ -117,6 +127,8 @@ var generateStatement = {
 					}
 				}
 
+				console.log(updateFields);
+
 				return 'UPDATE tbl_HouseAndLand'
 					+ ' SET ' + updateFields
 					+ ' WHERE id = @postID';
@@ -124,6 +136,18 @@ var generateStatement = {
 			delete: function() {
 				return 'DELETE FROM tbl_HouseAndLand WHERE id = @postID; SELECT SCOPE_IDENTITY() AS postID';
 			}
+		}
+	},
+	districts:{
+		get: function() {
+			return 'SELECT ' + dataFields.retrieve.districts
+				+ ' FROM tbl_Districts';
+		}
+	},
+	provinces: {
+		get: function() {
+			return 'SELECT ' + dataFields.retrieve.provinces
+				+ ' FROM tbl_Provinces';
 		}
 	}
 }
@@ -136,11 +160,11 @@ var injectParams = {
 			if (typeof params.creatorID !== 'undefined') {
 				preparedStatement.input('creatorID', mssql.Int);
 			}
-			if (typeof params.districtName !== 'undefined') {
-				preparedStatement.input('districtName', mssql.NVarChar(50));
+			if (typeof params.districtID !== 'undefined') {
+				preparedStatement.input('districtID', mssql.NVarChar(50));
 			}
-			if (typeof params.provinceName !== 'undefined') {
-				preparedStatement.input('provinceName', mssql.NVarChar(50));
+			if (typeof params.provinceID !== 'undefined') {
+				preparedStatement.input('provinceID', mssql.NVarChar(50));
 			}
 			if (typeof params.minPrice !== 'undefined') {
 				preparedStatement.input('minPrice', mssql.Decimal(19, 3));
@@ -249,6 +273,16 @@ var injectParams = {
 				return preparedStatement;
 			}
 		}
+	},
+	districts:{
+		get: function(preparedStatement) {
+			return preparedStatement;
+		}
+	},
+	provinces: {
+		get: function(preparedStatement) {
+			return preparedStatement;
+		}
 	}
 }
 
@@ -280,7 +314,9 @@ var execute = function(injectParams, statement, params) {
 
 								console.log(err);
 								mssqlConnector.close();
-								err.status = 500;
+								
+								err.status = 409;
+
 								reject(err);
 							}
 
@@ -307,7 +343,9 @@ var execute = function(injectParams, statement, params) {
 
 						mssqlConnector.close();
 						console.log(err);
-						err.status = 409;
+
+						err.status = 400;
+
 						reject(err);
 					});
 			})
@@ -376,6 +414,16 @@ module.exports = {
 			delete: function (params) {
 				return execute(injectParams.posts.postDetail.delete, generateStatement.posts.postDetail.delete(), params);
 			}
+		}
+	},
+	districts: {
+		get: function(){
+			return execute(injectParams.districts.get, generateStatement.districts.get(), {});
+		}
+	},
+	provinces: {
+		get: function(){
+			return execute(injectParams.provinces.get, generateStatement.provinces.get(), {});
 		}
 	}
 }

@@ -1,0 +1,54 @@
+/*
+	Original: http://codepen.io/jboeijenga/pen/PwaNxb
+*/
+
+label.price-tag {
+	font-weight: bold;
+	left: -0.5em;
+	top: 2.1em;
+	position: absolute;
+	display: inline-block;
+	width: 7em;
+	height: 2em;
+	line-height: 2em;
+	font-size: 1.5em;
+	text-align: center;
+	background: #FFDC40;
+	border-radius: 4px 4px 0 0;
+	text-shadow: rgba(255, 255, 255, 0.2) 1px 1px, rgba(255, 255, 255, 0.2) 1px 1px;
+	transform: rotate(-45deg);
+}
+
+.price-tag span {
+	width: 100%;
+	display: block;
+	overflow: hidden;
+}
+
+label.price-tag:before {
+	content: "";
+	position: absolute;
+	right: 99%;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	display: inline-block;
+	line-height: 0;
+	border-width: 1em;
+	border-style: solid;
+	border-color: transparent #FFDC40 #FFDC40 transparent;
+}
+
+label.price-tag:after {
+	content: "";
+	position: absolute;
+	left: 99%;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	display: inline-block;
+	line-height: 0;
+	border-width: 1em;
+	border-style: solid;
+	border-color: transparent transparent #FFDC40 #FFDC40;
+}

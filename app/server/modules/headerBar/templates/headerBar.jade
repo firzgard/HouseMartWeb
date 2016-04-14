@@ -12,24 +12,27 @@ nav.navbar.navbar-default
 		// Collect the nav links, forms, and other content for toggling
 		#bs-example-navbar-collapse-1.collapse.navbar-collapse
 			ul.nav.navbar-nav
-				li.active
+				li
 					a(href='')
 						| About 
 						span.sr-only (current)
 				li
 					a(href='') Contact
 			ul.nav.navbar-nav.navbar-right
-				li
-					button.btn.btn-default.navbar-btn(type='button', href='') Login/Signup
-				li(uib-dropdown='')
-					a#simple-dropdown(href='', uib-dropdown-toggle='', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-						| Hello, 
-						span.caret
-					ul(uib-dropdown-menu='', aria-labelledby='simple-dropdown')
+				case role
+					when configs.roles.guest
 						li
-							a(href='') Management
-						li.divider(role='separator')
-						li
-							a(href='') Logout
+							a(href='/login') Login/Signup
+					default
+						li(uib-dropdown='')
+							a#simple-dropdown(href='', uib-dropdown-toggle='', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+								| Hello, #{username}
+								span.caret
+							ul(uib-dropdown-menu='', aria-labelledby='simple-dropdown')
+								li
+									a(href='') Management
+								li.divider(role='separator')
+								li
+									a(href='') Logout
 		// /.navbar-collapse
 	// /.container-fluid

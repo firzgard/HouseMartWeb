@@ -10,8 +10,68 @@ postLoaderControllers.controller('PostLoaderController', ['$scope', '$postServic
 		$scope.posts = $postService.getPosts();
 		$scope.paginator = {
 			itemsPerPage: 10,
-			orderProp: 'dateUpdate',
-			orderOptions: ['area', 'price', 'dateUpdate', 'dateCreate']
+			orderProp: {
+				expression: 'dateUpdate',
+				reverse: true
+			},
+			orderOptions: [
+				{
+					label: 'Largest Land Area',
+					value: {
+						expression: 'area',
+						reverse: true
+					}
+				},
+				{
+					label: 'Smallest Land Area',
+					value: {
+						expression: 'area',
+						reverse: false
+					}
+				},
+				{
+					label: 'Highest Price',
+					value: {
+						expression: 'price',
+						reverse: true
+					}
+				},
+				{
+					label: 'Lowest Price',
+					value: {
+						expression: 'price',
+						reverse: false
+					}
+				},
+				{
+					label: 'Newest Update',
+					value: {
+						expression: 'dateUpdate',
+						reverse: true
+					}
+				},
+				{
+					label: 'Oldest Update',
+					value: {
+						expression: 'dateUpdate',
+						reverse: false
+					}
+				},
+				{
+					label: 'Newest Post',
+					value: {
+						expression: 'dateCreate',
+						reverse: true
+					}
+				},
+				{
+					label: 'Oldest Post',
+					value: {
+						expression: 'dateCreate',
+						reverse: false
+					}
+				}
+			]
 		};
 		$scope.showDetail = false;
 

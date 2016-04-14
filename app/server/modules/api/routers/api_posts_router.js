@@ -44,7 +44,7 @@ router.route('/')
 				
 				if (result.rowsAffected > 0) {
 
-					// Update images' url
+/*					// Update images' url
 					var updateParam = {
 						postID: result.recordSet[0].postID,
 						image1: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image1.jpeg',
@@ -68,7 +68,13 @@ router.route('/')
 							}
 
 							return res.sendStatus(500);
-						});
+						});*/
+
+					if(result.rowsAffected > 0) {
+							return res.status(201).json({postID: result.recordSet[0].postID});
+						} else {
+							return res.sendStatus(202);
+						}
 
 				} else {
 					return res.sendStatus(409);

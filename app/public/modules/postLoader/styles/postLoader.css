@@ -1,0 +1,70 @@
+#posts {
+	padding: 0;
+}
+
+a.post-item {
+	color: black;
+	text-decoration: none;
+	display: block;
+	position: relative;
+	height: 15em;
+	padding: 1.5em 1em 1em 1em;
+	margin-bottom: 1em;
+	background:  hsla(0, 0%, 100%, 0.8);
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	box-shadow: 0 5px 10px hsla(0, 0%, 0%, 0.2);
+	transition: all .2s ease-in-out;
+}
+
+a.post-item:hover {
+	color: white;
+	background: #286090;
+	border: 1px solid #204d74;
+	box-shadow: none;
+}
+
+.post-col {
+	height: 100%;
+}
+
+.post-thumbnail-img {
+	height: auto;
+	width: auto;
+	max-height: 100%;
+	max-width: 100%;
+	display: block;
+	margin: auto;
+}
+
+.post-title {
+	width: 100%;
+	display: block;
+	font-size: 1.5em;
+	font-weight: bold;
+	white-space: nowrap;
+    overflow: hidden;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #ddd;
+}
+
+.paginator {
+	display: block;
+	text-align: center;
+}
+
+.paginator-option {
+	display: block;
+	text-align: right;
+
+}
+
+.paginator-option .form-group {
+	display: inline-block;
+	margin-left: 2em;
+}
+.paginator-option select {
+	width: auto;
+	display: inline-block;
+	margin-left: 1em;
+}

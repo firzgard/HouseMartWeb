@@ -4,21 +4,29 @@ html(lang='en', ng-app="HouseMart")
 		meta(charset='UTF-8')
 		meta(name='viewport', content='width=device-width')
 		title HouseMart
-		link(rel='stylesheet', href='assets/libs/bootstrap/css/bootstrap.css')
-		link(rel='stylesheet', href='assets/libs/bootstrap/css/bootstrap-theme.css')
-		link(rel='stylesheet', href='assets/shared/styles/css/main.css')
 
-		script(src='assets/libs/angular/angular.js')
-		script(src='assets/libs/angular-ui-bootstrap/ui-bootstrap-tpls.js')
-		script(src='assets/modules/management/scripts/management_angular.js')
-	body
+		link(rel='stylesheet', href='/assets/libs/bootstrap/css/bootstrap.css')
+		link(rel='stylesheet', href='/assets/libs/bootstrap/css/bootstrap-theme.css')
+		link(rel='stylesheet', href='/assets/shared/styles/css/price-tag.css')
+		link(rel='stylesheet', href='/assets/modules/postLoader/styles/postLoader.css')
+		link(rel='stylesheet', href='/assets/shared/styles/css/main.css')
+
+	body(ng-cloak)
 		header
-			include /server/modules/headerBar/templates/headerBar.jade
-		.container.col-md-10
+			include /app/server/modules/headerBar/templates/headerBar.jade
+
+		.container.col-md-10.col-sm-offset-1
 			.col-md-3#side-bar
-				include /server/modules/management/templates/sideBar.jade
-			.col-md-9#main-content
-				include /server/modules/postLoader/templates/postLoader.jade
-				include /server/modules/management/templates/accountSetting.jade
-		#search-bar
-			include /server/modules/searchBar/templates/searchBar.jade
+				include /app/server/modules/management/templates/sideBar.jade
+			.col-md-9#content-container
+
+		script(src='/assets/libs/angular/angular.js')
+		script(src='/assets/libs/angular-ui-router/angular-ui-router.js')
+		script(src='/assets/libs/angular-ui-bootstrap/ui-bootstrap-tpls.js')
+		script(src='/assets/libs/angular-resource/angular-resource.js')
+		script(src='/assets/libs/angular-utils-pagination/dirPagination.js')
+		script(src='/assets/shared/libs/angular-img-fallback/angular.dcb-img-fallback.js')
+		script(src='/assets/shared/scripts/ng_restServices.js')
+		script(src='/assets/modules/postLoader/scripts/postLoader_ng_controller.js')
+		script(src='/assets/shared/scripts/emptyToEnd_ng_filter.js')
+		script(src='/assets/modules/management/scripts/management_ng_app.js')

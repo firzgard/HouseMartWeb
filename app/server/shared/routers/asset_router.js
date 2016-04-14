@@ -22,9 +22,7 @@ router.use('/libs/angular-resource', express.static(makeRootPath('node_modules/a
 router.use('/libs/angular-ui-router', express.static(makeRootPath('node_modules/angular-ui-router/release')));
 router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modules/angular-ui-bootstrap/dist')));
 router.use('/libs/angular-utils-pagination', express.static(makeRootPath('node_modules/angular-utils-pagination')));
-
 router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstrap/dist')));
-
 router.use('/libs/jquery', express.static(makeRootPath('node_modules/jquery/dist')));
 
 // Route for providing static assets

@@ -6,9 +6,9 @@ This project is the web-module of a real estate advertisement posting/browsing s
 This project includes the web server and the website.
 
 ##Training purpose:
-An experimental SEAN  web application (**S**ql Server, **E**xpress.js, **A**ngularJS, **N**ode.js). This project is my attemmpt to approach JavaScript (semi-)full-stack development, with Sql Server, Express.js, AngularJS, and Node.js at it's core.  
+An experimental SEAN  web application (**S**ql Server, **E**xpress.js, **A**ngularJS, **N**ode.js). This project is my first attemmpt to approach full-stack development, as well as to build a JavaScript (semi-)full-stack, with Sql Server, Express.js, AngularJS, and Node.js at it's core.  
 
-The secondary target is to learn by integrating as many different techniques and technologies into the project as possible.
+The secondary target is to learn as many different techniques and technologies by integrating them into the project as possible.
 
 ###Goals:
 #### - Archieved:
@@ -34,14 +34,32 @@ The secondary target is to learn by integrating as many different techniques and
 ###API ROUTES:
 
 #### Create post (User/Admin)  
-`http://(host)[:(port)]/api/posts (POST)`
+`http://(host)[:(port)]/api/posts (PUT)`
+
+#####Supported params:
+######Required:  
+  * address (String(150))
+  * districtID (Integer)
+  * title (String(50))
+  * type (Integer)
+
+######Not required:
+  * ownerName: (String(60))
+  * phone (String(20))
+  * description (String(1000))
+  * area (Decimal(19, 3))
+  * price (Decimal(19, 3))
+  * latitude (Decimal(9, 6))
+  * longitude (Decimal(9, 6))
+  * isPublic (Boolean): Only Admin is allowed to set
 
 ####  Get/search all posts with general infos (Guest/User/Admin)  
-`http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
+`http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][provinceID=(provinceID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
 
 #####Supported query params:  
   * creatorID (Integer): If equals userID, then allow viewing setting isDetailed flag.
   * districtID (Integer)
+  * provinceID (Integer)
   * minPrice (Float)
   * maxPrice (Float)
   * minArea (Float)
@@ -167,7 +185,28 @@ The secondary target is to learn by integrating as many different techniques and
 ```
 
 ####  Update 1 post (User/Admin)  
-`http://(host)[:(port)]/api/posts/(postID) (POST)`
+`http://(host)[:(port)]/api/posts/(postID) (PATCH)`
+
+#####Supported params:
+######Required:  
+  * address (String(150))
+  * districtID (Integer)
+  * title (String(50))
+  * type (Integer)
+
+######Not required:
+  * ownerName: (String(60))
+  * phone (String(20))
+  * description (String(1000))
+  * area (Decimal(19, 3))
+  * price (Decimal(19, 3))
+  * latitude (Decimal(9, 6))
+  * longitude (Decimal(9, 6))
+  * image1 (Boolean)
+  * image2 (Boolean)
+  * image3 (Boolean)
+  * isPublic (Boolean): Only Admin is allowed to set
+
 #### Delete 1 post (User/Admin)  
 `http://(host)[:(port)]/api/posts/(postID) (DELETE)`
   

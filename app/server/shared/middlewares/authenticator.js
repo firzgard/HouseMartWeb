@@ -43,27 +43,31 @@ module.exports = {
 								success: true,
 								token: token
 							};
-							req.authorization = resultSet[0].role;
+							req.authorization = {
+								userID: resultSet[0].id,
+								username: resultSet[0].username,
+								role: resultSet[0].role
+							};
 
-							next();
+							return next();
 						} else {
 							
 							// Authentication failed
-							req.authentication = { success: false, message: 'Authentication failed. Incorrect username/password' };
-							next();
+							req.authentication = { success: false, message: 'Incorrect username/password.' };
+							return next();
 						}
 					})
 					.catch(function(err){
 
 						mssqlConnector.close();
 						console.log(err);
-						res.sendStatus(500);
+						return res.sendStatus(500);
 					});
 			})
 			.catch(function(err){
 
 				console.log(err);
-				res.sendStatus(500);
+				return res.sendStatus(500);
 			});
 	},
 
@@ -80,7 +84,7 @@ module.exports = {
 				if(err) {
 
 					// Decoded unsuccessfully
-					res.status(401).send('Authentication failed.');
+					return res.status(401).send('Authentication failed.');
 				} else {
 
 					var mssqlConnector = new mssql.Connection(configs.dbConfig);
@@ -90,7 +94,7 @@ module.exports = {
 							
 							// Decoded successfully
 							// Retrieve user's authorization from database
-							var queryString		= "SELECT id, role FROM tbl_Account WHERE username = '" + payload.username 
+							var queryString		= "SELECT id, role FROM tbl_Account WHERE username = '" + payload.username
 												+ "' AND password = '" + payload.password + "'",
 								mssqlRequestor	= new mssql.Request(mssqlConnector);
 
@@ -103,26 +107,27 @@ module.exports = {
 
 										req.authorization = {
 											userID: resultSet[0].id,
+											username: payload.username,
 											role: resultSet[0].role
 										};
-										next();
+										return next();
 									} else {
 										
 										// Authentication failed
-										res.status(401).send('Authentication failed.');
+										return res.status(401).send('Authentication failed.');
 									}
 								})
 								.catch(function(err){
 
 									mssqlConnector.close();
 									console.log(err);
-									res.sendStatus(500);
+									return res.sendStatus(500);
 								});
 						})
 						.catch(function(err){
 
 							console.log(err);
-							res.sendStatus(500);
+							return res.sendStatus(500);
 						});
 				}
 			});
@@ -132,7 +137,7 @@ module.exports = {
 			req.authorization = {
 				role: configs.roles.guest
 			};
-			next();
+			return next();
 		}
 	},
 
@@ -141,12 +146,12 @@ module.exports = {
 		switch(req.authorization.role) {
 			case configs.roles.guest:
 
-				res.sendStatus(401);
+				return res.sendStatus(401);
 				break;
 
 			case configs.roles.admin:
 
-				next();
+				return next();
 				break;
 
 			case configs.roles.user:
@@ -167,28 +172,28 @@ module.exports = {
 								if(resultSet.length > 0) {
 
 									if(resultSet[0].creatorID == req.authorization.userID){
-										next();
+										return next();
 									} else {
-										res.sendStatus(403);
+										return res.sendStatus(403);
 									}
 
 									
 								} else {
 									
-									res.status(404).send({message: 'Invalid item ID!!'})
+									return res.status(404).send({message: 'Invalid item ID!!'})
 								}
 							})
 							.catch(function(err){
 
 								mssqlConnector.close();
 								console.log(err);
-								res.sendStatus(500);
+								return res.sendStatus(500);
 							});
 					})
 					.catch(function(err){
 
 						console.log(err);
-						res.sendStatus(500);
+						return res.sendStatus(500);
 					});
 
 				break;

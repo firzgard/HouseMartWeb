@@ -2,7 +2,7 @@
 	<div class="paginator-option">
 		<div class="form-group">
 			<label>Order By:</label>
-			<select ng-model="paginator.orderProp" ng-options="opt as opt for opt in paginator.orderOptions" class="form-control"></select>
+			<select ng-model="paginator.orderProp" ng-options="opt.value as opt.label for opt in paginator.orderOptions" class="form-control"></select>
 		</div>
 		<div class="form-group">
 			<label>Posts per Page:</label>
@@ -11,52 +11,26 @@
 	</div>
 	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
 
-	<ul id="posts">
-		<li dir-paginate="post in posts | orderBy: paginator.orderProp | itemsPerPage: paginator.itemsPerPage" pagination-id="post-loader" class="post-thumbnail">
-			<a ui-sref="main.postDetail({postID: post.postID})" ng-click="showDetail = ! showDetail">
-				<img class="thumbnail-img" src="assets/shared/imgs/home-icon.png" alt="No Image" />
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
+	<div id="posts">
+		<a class="post-item row" dir-paginate="post in posts | orderBy:paginator.orderProp.expression:paginator.orderProp.reverse | emptyToEnd: paginator.orderProp.expression | itemsPerPage: paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" ng-click="showDetail = ! showDetail" >
+			<div class="col-sm-4 post-col	">
+				<img class="post-thumbnail-img" ng-src="{{post.image1 || 'assets/shared/imgs/home-icon.png'}}" fallback-src="assets/shared/imgs/home-icon.png" alt="No Image" loading-src/>
+			</div>
+			<div class="col-sm-8 post-col">
+				<span class="post-title">{{post.title}}</span>
+				<div ng-show="post.area">
+					<p class="post-label">Area: </p><p>{{post.area}}</p>
 				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
+				<div ng-show="post.dateUpdate">
+					<p class="post-label">Updated: </p><p>{{post.dateUpdate}}</p>
 				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
+				<div ng-show="post.dateCreate">
+					<p class="post-label">Posted: </p><p>{{post.dateCreate}}</p>
 				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-				<div>
-					<span class:"label">: </span><p>{{post.}}</p>
-				</div>
-			</a>
-		</li>
-	</ul>
+			</div>
+			<label class="price-tag" ng-show="post.price"><span>{{post.price | currency:$:0}}</span></label>
+		</a>
+	</div>
 
 	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
 </div>

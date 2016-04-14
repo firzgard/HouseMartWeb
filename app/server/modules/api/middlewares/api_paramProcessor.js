@@ -2,41 +2,49 @@ module.exports = {
 	posts: {
 		get: function(req, res, next){
 
+			var preparedParams = {};
+
 			// Check unrequired params
 			{
 				if(typeof req.query.creatorID !== 'undefined') {
-					req.query.creatorID = Number.parseInt(req.query.creatorID, 10);
-					if(Number.isNaN(req.query.creatorID)) {
+					preparedParams.creatorID = Number.parseInt(req.query.creatorID, 10);
+					if(Number.isNaN(preparedParams.creatorID)) {
 						return res.sendStatus(400);
 					}
 				}
 				if(typeof req.query.districtID !== 'undefined') {
-					req.query.districtID = Number.parseInt(req.query.districtID, 10);
-					if(Number.isNaN(req.query.districtID)) {
+					preparedParams.districtID = Number.parseInt(req.query.districtID, 10);
+					if(Number.isNaN(preparedParams.districtID)) {
+						return res.sendStatus(400);
+					}
+				}
+				if(typeof req.query.provinceID !== 'undefined') {
+					preparedParams.provinceID = Number.parseInt(req.query.provinceID, 10);
+					if(Number.isNaN(preparedParams.provinceID)) {
 						return res.sendStatus(400);
 					}
 				}
 				if(typeof req.query.minPrice !== 'undefined') {
-					req.query.minPrice = Number.parseFloat(req.query.minPrice);
-					if(Number.isNaN(req.query.minPrice)) {
+					preparedParams.minPrice = Number.parseFloat(req.query.minPrice);
+					if(Number.isNaN(preparedParams.minPrice)) {
 						return res.sendStatus(400);
 					}
 				}
 				if(typeof req.query.maxPrice !== 'undefined') {
-					req.query.maxPrice = Number.parseFloat(req.query.maxPrice);
-					if(Number.isNaN(req.query.maxPrice)) {
+					preparedParams.maxPrice = Number.parseFloat(req.query.maxPrice);
+					if(Number.isNaN(preparedParams.maxPrice)) {
 						return res.sendStatus(400);
 					}
 				}
 				if(typeof req.query.minArea !== 'undefined') {
-					req.query.minArea = Number.parseFloat(req.query.minArea);
-					if(Number.isNaN(req.query.minArea)) {
+					preparedParams.minArea = Number.parseFloat(req.query.minArea);
+					if(Number.isNaN(preparedParams.minArea)) {
 						return res.sendStatus(400);
 					}
 				}
 				if(typeof req.query.maxArea !== 'undefined') {
-					req.query.maxArea = Number.parseFloat(req.query.maxArea);
-					if(Number.isNaN(req.query.maxArea)) {
+					preparedParams.maxArea = Number.parseFloat(req.query.maxArea);
+					if(Number.isNaN(preparedParams.maxArea)) {
 						return res.sendStatus(400);
 					}
 				}
@@ -44,9 +52,9 @@ module.exports = {
 			
 			// Parse isDetailed param
 			if(typeof req.query.isDetailed !== 'undefined') {
-				req.query.isDetailed = (req.query.isDetailed.toUpperCase() === 'TRUE');
+				preparedParams.isDetailed = (req.query.isDetailed.toUpperCase() === 'TRUE');
 			} else {
-				req.query.isDetailed = false;
+				preparedParams.isDetailed = false;
 			}
 
 			// Check authorization to see whether the requester is allowed to see detailed posts' infos
@@ -55,50 +63,58 @@ module.exports = {
 				case configs.roles.user:
 
 					// If the requester is requesting their own posts' details, then allow. If not, set isDetailed to false
-					if(typeof req.query.creatorID !== 'undefined' && req.query.creatorID === req.authorization.userID) {
+					if(typeof preparedParams.creatorID !== 'undefined' && preparedParams.creatorID === req.authorization.userID) {
 						break;
 					}
 
 				// If requester is a guest, set isDetailed to false
 				case configs.roles.guest:
 
-					req.query.isDetailed = false;
+					preparedParams.isDetailed = false;
 					break;
 			}
+
+			req.query = preparedParams;
 		
-			next();
+			return next();
 		},
 		put: function(req, res, next){
 			
+			var preparedParams = {};
+
 			// Guest is not allowed to post new post
 			if (req.authorization.role == configs.roles.guest) {
-				res.sendStatus(401);
+				return res.sendStatus(401);
 			}
 
 			// Check whether all required params are presented and is in correct type
 			{
 				if(typeof req.body.address === 'undefined' || req.body.address.length > 150) {
 					return res.sendStatus(400);
+				} else {
+					preparedParams.address = req.body.address;
 				}
 
 				if(typeof req.body.districtID === 'undefined') {
 					return res.sendStatus(400);
 				} else {
-					req.body.districtID = Number.parseInt(req.body.districtID, 10);
-					if (Number.isNaN(req.query.districtID)) {
+					preparedParams.districtID = Number.parseInt(req.body.districtID, 10);
+					if (Number.isNaN(preparedParams.districtID)) {
 						return res.sendStatus(400);
 					}
 				}
 
 				if(typeof req.body.title === 'undefined' || req.body.title.length > 50) {
 					return res.sendStatus(400);
+				}  else {
+					preparedParams.title = req.body.title;
 				}
 				
 				if(typeof req.body.type === 'undefined') {
 					return res.sendStatus(400);
 				} else {
-					req.body.type = Number.parseInt(req.body.type, 10);
-					if (Number.isNaN(req.query.type)) {
+					preparedParams.type = Number.parseInt(req.body.type, 10);
+					if (Number.isNaN(preparedParams.type)) {
 						return res.sendStatus(400);
 					}
 				}
@@ -109,45 +125,51 @@ module.exports = {
 				if(typeof req.body.ownerName !== 'undefined') {
 					if (req.body.ownerName.length > 60) {
 						return res.sendStatus(400);
+					} else {
+						preparedParams.ownerName = req.body.ownerName;
 					}
 				}
 					
 				if(typeof req.body.phone !== 'undefined') {
 					if(req.body.phone.length > 20) {
 						return res.sendStatus(400);
+					} else {
+						preparedParams.phone = req.body.phone;
 					}
 				}
 
 				if(typeof req.body.description !== 'undefined') {
 					if(req.body.description.length > 1000) {
 						return res.sendStatus(400);
+					} else {
+						preparedParams.description = req.body.description;
 					}
 				}
 
 				if(typeof req.body.area !== 'undefined') {
-					req.body.area = Number.parseFloat(req.body.area);
-					if(Number.isNaN(req.body.area)) {
+					preparedParams.area = Number.parseFloat(req.body.area);
+					if(Number.isNaN(preparedParams.area)) {
 						return res.sendStatus(400);
 					}
 				}
 
 				if(typeof req.body.price !== 'undefined') {
-					req.body.price = Number.parseFloat(req.body.price);
-					if(Number.isNaN(req.body.price)) {
+					preparedParams.price = Number.parseFloat(req.body.price);
+					if(Number.isNaN(preparedParams.price)) {
 						return res.sendStatus(400);
 					}
 				}
 
 				if(typeof req.body.latitude !== 'undefined') {
-					req.body.latitude = Number.parseFloat(req.body.latitude);
-					if(Number.isNaN(req.body.latitude)) {
+					preparedParams.latitude = Number.parseFloat(req.body.latitude);
+					if(Number.isNaN(preparedParams.latitude)) {
 						return res.sendStatus(400);
 					}
 				}
 
 				if(typeof req.body.longitude !== 'undefined') {
-					req.body.longitude = Number.parseFloat(req.body.longitude);
-					if(Number.isNaN(req.body.longitude)) {
+					preparedParams.longitude = Number.parseFloat(req.body.longitude);
+					if(Number.isNaN(preparedParams.longitude)) {
 						return res.sendStatus(400);
 					}
 				}
@@ -155,25 +177,25 @@ module.exports = {
 				if (typeof req.body.isPublic  !== 'undefined') {
 					// Only admin is allowed to set isPublic flag
 					if (req.authorization.role === configs.roles.admin) {
-						if(typeof req.body.isPublic !== 'boolean') {
-							return res.sendStatus(400);
-						}
+						preparedParams.isPublic = (req.query.isPublic.toUpperCase() === 'TRUE')
 					} else {
-						req.body.isPublic = false;
+						preparedParams.isPublic = false;
 					}
 				} else {
-					req.body.isPublic = false;
+					preparedParams.isPublic = false;
 				}
 			}
 
 			// Mark time of creation
-			req.body.dateCreate = new Date().toUTCString();
-			req.body.dateUpdate = req.body.dateCreate;
+			preparedParams.dateCreate = new Date().toUTCString();
+			preparedParams.dateUpdate = preparedParams.dateCreate;
 			// Mark creator ID
-			req.body.creatorID = req.authorization.userID;
-			req.body.updatorID = req.authorization.userID;
+			preparedParams.creatorID = req.authorization.userID;
+			preparedParams.updatorID = req.authorization.userID;
 
-			next();
+			req.body = preparedParams;
+
+			return next();
 		},
 		postDetail: {
 			get: function(req, res, next){
@@ -185,7 +207,7 @@ module.exports = {
 				}
 
 				// Parse isDetailed param
-				if(req.query.isDetailed) {
+				if(typeof req.query.isDetailed !== 'undefined') {
 					req.query.isDetailed = (req.query.isDetailed.toUpperCase() === 'TRUE');
 				}
 
@@ -196,9 +218,11 @@ module.exports = {
 					req.query.isDetailed = false;
 				}
 
-				next();
+				return next();
 			},
 			patch: function(req, res, next){
+
+				var preparedParams = {};
 
 				// Prevent empty update
 				if ( Object.keys(req.body).length < 1) {
@@ -207,8 +231,8 @@ module.exports = {
 
 				// Check required params
 				{
-					req.body.postID = Number.parseInt(req.params.postID, 10);
-					if(Number.isNaN(req.body.postID)) {
+					preparedParams.postID = Number.parseInt(req.params.postID, 10);
+					if(Number.isNaN(preparedParams.postID)) {
 						return res.sendStatus(400);
 					}
 				}
@@ -218,19 +242,23 @@ module.exports = {
 					if(typeof req.body.ownerName !== 'undefined') {
 						if (req.body.ownerName.length > 60) {
 							return res.sendStatus(400);
+						} else {
+							preparedParams.ownerName = req.body.ownerName;
 						}
 					}
 
 					if(typeof req.body.address !== 'undefined') {
 						if (req.body.address.length > 150) {
 							return res.sendStatus(400);
+						} else {
+							preparedParams.address = req.body.address;
 						}
 					}
 
 
 					if(typeof req.body.districtID !== 'undefined') {
-						req.body.districtID = Number.parseInt(req.body.districtID, 10);
-						if (Number.isNaN(req.query.districtID)) {
+						preparedParams.districtID = Number.parseInt(req.body.districtID, 10);
+						if (Number.isNaN(preparedParams.districtID)) {
 							return res.sendStatus(400);
 						}
 					}
@@ -238,12 +266,14 @@ module.exports = {
 					if(typeof req.body.title !== 'undefined') {
 						if (req.body.title.length > 50) {
 							return res.sendStatus(400);
+						} else {
+							preparedParams.title = req.body.title;
 						}
 					}
 
 					if(typeof req.body.type !== 'undefined') {
-						req.body.type = Number.parseInt(req.body.type, 10);
-						if (Number.isNaN(req.query.type)) {
+						preparedParams.type = Number.parseInt(req.body.type, 10);
+						if (Number.isNaN(preparedParams.type)) {
 							return res.sendStatus(400);
 						}
 					}
@@ -251,63 +281,95 @@ module.exports = {
 					if(typeof req.body.description !== 'undefined') {
 						if(req.body.description.length > 1000) {
 							return res.sendStatus(400);
+						} else {
+							preparedParams.description = req.body.description;
 						}
 					}
 
 					if(typeof req.body.phone !== 'undefined') {
 						if(req.body.phone.length > 20) {
 							return res.sendStatus(400);
+						} else {
+							preparedParams.phone = req.body.phone;
 						}
 					}
 
 					if(typeof req.body.area !== 'undefined') {
-						req.body.area = Number.parseFloat(req.body.area);
-						if(Number.isNaN(req.body.area)) {
+						preparedParams.area = Number.parseFloat(req.body.area);
+						if(Number.isNaN(preparedParams.area)) {
 							return res.sendStatus(400);
 						}
 					}
 
 					if(typeof req.body.price !== 'undefined') {
-						req.body.price = Number.parseFloat(req.body.price);
-						if(Number.isNaN(req.body.price)) {
+						preparedParams.price = Number.parseFloat(req.body.price);
+						if(Number.isNaN(preparedParams.price)) {
 							return res.sendStatus(400);
 						}
 					}
 
 					if(typeof req.body.latitude !== 'undefined') {
-						req.body.latitude = Number.parseFloat(req.body.latitude);
-						if(Number.isNaN(req.body.latitude)) {
+						preparedParams.latitude = Number.parseFloat(req.body.latitude);
+						if(Number.isNaN(preparedParams.latitude)) {
 							return res.sendStatus(400);
 						}
 					}
 
 					if(typeof req.body.longitude !== 'undefined') {
-						req.body.longitude = Number.parseFloat(req.body.longitude);
-						if(Number.isNaN(req.body.longitude)) {
+						preparedParams.longitude = Number.parseFloat(req.body.longitude);
+						if(Number.isNaN(preparedParams.longitude)) {
 							return res.sendStatus(400);
 						}
 					}
 
-					if (typeof req.body.isPublic  !== 'undefined') {
+					if(typeof req.body.image1 !== 'undefined') {
+						if (req.body.image1.toUpperCase() === 'TRUE') {
+							preparedParams.image1 = '/assets/shared/imgs/posts/' + preparedParams.postID + '/image1.jpeg';
+						} else if (req.body.image1.toUpperCase() === 'FALSE') {
+							preparedParams.image1 = null;
+						}
+					}
+
+					if(typeof req.body.image2 !== 'undefined') {
+						if (req.body.image2.toUpperCase() === 'TRUE') {
+							preparedParams.image2 = '/assets/shared/imgs/posts/' + preparedParams.postID + '/image2.jpeg';
+						} else if (req.body.image2.toUpperCase() === 'FALSE') {
+							preparedParams.image2 = null;
+						}
+						
+					}
+
+					if(typeof req.body.image3 !== 'undefined') {
+						if (req.body.image3.toUpperCase() === 'TRUE') {
+							preparedParams.image3 = '/assets/shared/imgs/posts/' + preparedParams.postID + '/image3.jpeg';
+						} else if (req.body.image3.toUpperCase() === 'FALSE'){
+							preparedParams.image3 = null;
+						}
+					}
+
+					if (typeof req.body.isPublic !== 'undefined') {
 						// Only admin is allowed to set isPublic flag
 						if (req.authorization.role === configs.roles.admin) {
-							if(typeof req.body.isPublic !== 'boolean') {
-								return res.sendStatus(400);
+
+							if(req.body.isPublic.toUpperCase() === 'TRUE') {
+								preparedParams.isPublic = true;
+							} else if(req.body.isPublic.toUpperCase() === 'FALSE') {
+								preparedParams.isPublic = false;
 							}
 						} else {
-							req.body.isPublic = false;
+							preparedParams.isPublic = false;
 						}
-					} else {
-						req.body.isPublic = false;
 					}
 				}
 					
 				// Record updating time
-				req.body.dateUpdate = new Date().toUTCString();
+				preparedParams.dateUpdate = new Date().toUTCString();
 				// Record updator ID
-				req.body.updatorID = req.authorization.userID;
+				preparedParams.updatorID = req.authorization.userID;
 
-				next();
+				req.body = preparedParams;
+
+				return next();
 			},
 			delete: function(req, res, next){
 
@@ -317,7 +379,7 @@ module.exports = {
 					return res.sendStatus(400);
 				}
 
-				next();
+				return next();
 			},
 		}
 	}

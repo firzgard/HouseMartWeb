@@ -21,13 +21,13 @@ var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenti
 router.use('/assets', routerAssets);
 
 // Redirect from default to homepage
-router.get('/', function(req, res){
+router.get('/', authenticator.authorize, function(req, res){
 	res.redirect('/home');
 });
 
 // homepage
-router.get('/home', authenticator.authorize, function(req, res){
-	res.render(makeRootPath('app/server/modules/home/templates/home.jade'));
+router.get('/home', function(req, res){
+	res.render(makeRootPath('app/server/modules/home/templates/home.jade'), req.authorization);
 });
 
 // login page
@@ -38,7 +38,11 @@ router.use('/signup', routerSignup);
 
 // Register page
 router.get('/management', authenticator.authorize, function(req, res){
-	res.render(makeRootPath('app/server/modules/management/templates/management.jade'))
+
+	if(req.authorization.role === configs.roles.guest) {
+		res.redirect('/home');
+	}
+	res.render(makeRootPath('app/server/modules/management/templates/management.jade'), req.authorization);
 });
 
 // Route for providing API for android app

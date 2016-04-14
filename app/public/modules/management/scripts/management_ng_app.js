@@ -1,6 +1,6 @@
 'use strict';
 
-// Homepage angular app module
+// Management page angular app module
 
 var houseMart = angular.module('HouseMart', [
 	'ui.bootstrap',

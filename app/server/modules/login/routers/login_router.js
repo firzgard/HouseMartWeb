@@ -18,9 +18,9 @@ router.route('/')
 	// Route for getting login page (Access at GET http://(host)[:(port)]/login)
 	.get(authenticator.authorize, function(req, res){
 
-		if(req.authorization == 0) {
+		if(req.authorization.role == 0) {
 
-			res.render(makeRootPath('app/server/modules/login/templates/login.jade'));
+			res.render(makeRootPath('app/server/modules/login/templates/login.jade'), req.authorization);
 		} else {
 
 			res.redirect('/home');
@@ -39,7 +39,7 @@ router.route('/')
 			res.redirect('/home');
 		} else {
 
-			res.render(makeRootPath('app/server/modules/login/templates/login.jade'));
+			res.render(makeRootPath('app/server/modules/login/templates/login.jade'), req.authorization);
 		}
 	});
 
