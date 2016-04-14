@@ -6,7 +6,8 @@ var houseMart = angular.module('HouseMart', [
 	'ui.bootstrap',
 	'ui.router',
 	'angularUtils.directives.dirPagination',
-	'dcbImgFallback' ,
+	'dcbImgFallback',
+	'zumba.angular-waypoints',
 	'HouseMart.PostLoaderControllers',
 	'HouseMart.EmptyToEndFilter',
 	'HouseMart.APIServices'

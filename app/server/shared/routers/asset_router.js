@@ -21,11 +21,12 @@ router.use('/libs/angular', express.static(makeRootPath('node_modules/angular'))
 router.use('/libs/angular-resource', express.static(makeRootPath('node_modules/angular-resource')));
 router.use('/libs/angular-ui-router', express.static(makeRootPath('node_modules/angular-ui-router/release')));
 router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modules/angular-ui-bootstrap/dist')));
+router.use('/libs/angular-ui-scrollpoint', express.static(makeRootPath('bower_components/angular-ui-scrollpoint/dist')));
 router.use('/libs/angular-utils-pagination', express.static(makeRootPath('node_modules/angular-utils-pagination')));
+router.use('/libs/angular-waypoints', express.static(makeRootPath('bower_components/angular-waypoints/dist')));
 router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstrap/dist')));
 router.use('/libs/jquery', express.static(makeRootPath('node_modules/jquery/dist')));
 router.use('/libs/waypoints', express.static(makeRootPath('node_modules/waypoints/lib')));
-
 
 // Route for providing static assets
 router.use('/', express.static(makeRootPath('app/public')));

@@ -13,6 +13,7 @@
 .sticky-side-bar {
 	position: fixed;
 	top: 1em;
+	width: 18.5%;
 }
 
 #content-container {

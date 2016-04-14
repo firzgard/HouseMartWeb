@@ -141,7 +141,8 @@ var generateStatement = {
 	districts:{
 		get: function() {
 			return 'SELECT ' + dataFields.retrieve.districts
-				+ ' FROM tbl_Districts AS Districts, tbl_Provinces AS Provinces';
+				+ ' FROM tbl_Districts AS Districts, tbl_Provinces AS Provinces'
+				+ ' WHERE Districts.provinceID = Provinces.provinceID';
 		}
 	},
 	provinces: {

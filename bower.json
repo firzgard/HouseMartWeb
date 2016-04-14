@@ -1,0 +1,23 @@
+{
+  "name": "housemart",
+  "description": "SAD Practical Project",
+  "main": "server.js",
+  "authors": [
+    "Steven Firzen <megafirzen@gmail.com> (http://islashf.net/)"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/megafirzen/HouseMartWeb",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-scrollpoint": "^2.1.1",
+    "angular-waypoints": "^2.0.0",
+    "ngSticky": "^1.8.10"
+  }
+}

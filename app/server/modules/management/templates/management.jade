@@ -17,22 +17,23 @@ html(lang='en', ng-app="HouseMart")
 
 		.container.col-md-10.col-sm-offset-1
 			.col-md-3
-				include /app/server/modules/management/templates/sideBar.jade
-			.col-md-9#content-container
-				#post-container
-					div(ui-view)
+				.scrollpoint(zum-waypoint="sideBar" down="flags.sticky" up="flags.not" offset="20")
+				#side-bar(ng-class="{'sticky-side-bar': sideBar.flags.sticky}")
+					include /app/server/modules/management/templates/sideBar.jade
+			.col-md-9
+				#content-container
+					#post-container
+						div(ui-view)
 
-		script(src='/assets/libs/jquery/jquery.js')
+		script(src='/assets/libs/waypoints/noframework.waypoints.js')
 		script(src='/assets/libs/angular/angular.js')
 		script(src='/assets/libs/angular-ui-router/angular-ui-router.js')
 		script(src='/assets/libs/angular-ui-bootstrap/ui-bootstrap-tpls.js')
 		script(src='/assets/libs/angular-resource/angular-resource.js')
 		script(src='/assets/libs/angular-utils-pagination/dirPagination.js')
+		script(src='/assets/libs/angular-waypoints/angular-waypoints.js')
 		script(src='/assets/shared/libs/angular-img-fallback/angular.dcb-img-fallback.js')
 		script(src='/assets/shared/scripts/ng_restServices.js')
 		script(src='/assets/modules/postLoader/scripts/postLoader_ng_controller.js')
 		script(src='/assets/shared/scripts/emptyToEnd_ng_filter.js')
 		script(src='/assets/modules/management/scripts/management_ng_app.js')
-		script(src='/assets/libs/waypoints/jquery.waypoints.js')
-		script(src='/assets/libs/waypoints/shortcuts/sticky.js')
-		script(src='/assets/modules/management/scripts/main.js')
