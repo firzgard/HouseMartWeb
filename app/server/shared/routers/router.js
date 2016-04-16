@@ -3,6 +3,8 @@
 // BASE SETUP
 // ================================================
 
+"use strict";
+
 var express 		= require('express');
 
 var routerAPI		= require(makeRootPath('app/server/modules/api/routers/api_router.js')),

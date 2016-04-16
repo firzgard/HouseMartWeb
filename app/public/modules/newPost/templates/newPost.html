@@ -1,4 +1,4 @@
-<form name="newPost" ng-submit="NewPostModalController.submit()">	
+<form name="newPost" class="new-post-modal" ng-submit="NewPostModalController.submit()">	
 	<div class="modal-header">
 		<h3 class="modal-title">New Post FTW!!</h3>
 	</div>
@@ -6,7 +6,7 @@
 
 		<!-- Alert for posting unsuccessfully -->
 		<div class="col-md-12" ng-if="NewPostModalController.putError">
-			<uib-alert type="danger" dismiss-on-timeout="5000" close="NewPostModalController.putError = false">Error! A team of armed monkeys is preventing us creating new post! Try again later!</uib-alert>
+			<uib-alert type="danger" dismiss-on-timeout="5000" close="NewPostModalController.putError = false">Error! A team of armed monkeys is preventing us from creating new post! Try again later!</uib-alert>
 		</div>
 
 		<!-- Right Column -->
@@ -47,7 +47,7 @@
 			<div class="form-group">
 				<label for="new-post-area">Land Area</label>
 				<div class="input-group">
-					<input type="number" ng-model="NewPostModalController.newPost.area" name="area" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-area" >
+					<input type="number" ng-model="NewPostModalController.newPost.area" name="area" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'default blur' }" class="form-control" id="new-post-area" >
 					<span class="input-group-addon">m<sup>2</sup></span>
 				</div>
 				<p ng-show="newPost.area.$invalid" class="help-block">Area must be a number with less than 4 decimal places!!</p>
@@ -58,7 +58,7 @@
 				<label for="new-post-price">Price</label>
 				<div class="input-group">
 				<span class="input-group-addon">$</span>
-					<input type="number" ng-model="NewPostModalController.newPost.price" name="price" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-price" >
+					<input type="number" ng-model="NewPostModalController.newPost.price" name="price" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'default blur' }" class="form-control" id="new-post-price" >
 				</div>
 				<p ng-show="newPost.price.$invalid" class="help-block">Price must be a number with less than 4 decimal places!!</p>
 			</div>
@@ -73,15 +73,26 @@
 
 		<!-- Right Column -->
 		<div class="col-md-6">
+
+			<!-- Province ID -->
 			<div class="form-group">
 				<label for="new-post-provinceID">Province</label>
-				<select ng-model="NewPostModalController.newPost.provinceID" name="provinceID" ng-options="opt.provinceID as opt.provinceName for opt in NewPostModalController.provinces | orderBy: 'provinceName'" ng-model-options="{ updateOn: 'blur' }" ng-required="true" class="form-control"></select>
+				<select ng-model="NewPostModalController.newPost.provinceID" name="provinceID" ng-options="opt.provinceID as opt.provinceName for opt in NewPostModalController.provinces | orderBy: 'provinceName'" ng-model-options="{ updateOn: 'default blur' }" ng-required="true" class="form-control"></select>
 				<p ng-show="newPost.provinceID.$error.required && newPost.provinceID.$touched" class="help-block">Required field!</p>
 			</div>
+
+			<!-- District ID -->
 			<div class="form-group">
 				<label for="new-post-districtID">District</label>
-				<select ng-model="NewPostModalController.newPost.districtID" name="districtID" ng-options="opt.districtID as opt.districtName for opt in (NewPostModalController.districts | filter: {provinceID: NewPostModalController.newPost.provinceID}: true | orderBy: 'districtName')" ng-model-options="{ updateOn: 'blur' }" ng-required="true" ng-disabled="newPost.provinceID.$invalid" class="form-control"></select>
+				<select ng-model="NewPostModalController.newPost.districtID" name="districtID" ng-options="opt.districtID as opt.districtName for opt in (NewPostModalController.districts | filter: {provinceID: NewPostModalController.newPost.provinceID}: true | orderBy: 'districtName')" ng-model-options="{ updateOn: 'default blur' }" ng-required="true" ng-disabled="newPost.provinceID.$invalid" class="form-control"></select>
 				<p ng-show="newPost.districtID.$error.required && newPost.districtID.$touched" class="help-block">Required field!</p>
+			</div>
+
+			<!-- Google Map -->
+			<div class="form-group">
+				<ui-gmap-google-map center="NewPostModalController.map.center" zoom="NewPostModalController.map.zoom" events="NewPostModalController.map.events">
+					<ui-gmap-marker coords="NewPostModalController.marker.coords" options="NewPostModalController.marker.options" idkey="'houseMarker'"></ui-gmap-marker>
+				</ui-gmap-google-map>
 			</div>
 		</div>
 	</div>

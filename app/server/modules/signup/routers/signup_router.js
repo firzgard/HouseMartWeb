@@ -3,6 +3,8 @@
 // BASE SETUP
 // ================================================
 
+"use strict";
+
 var express 				= require('express'),
 	mssql					= require('mssql'),
 	jwt						= require('jsonwebtoken'),

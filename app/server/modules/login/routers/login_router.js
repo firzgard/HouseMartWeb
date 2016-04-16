@@ -3,6 +3,8 @@
 // BASE SETUP
 // ================================================
 
+"use strict";
+
 var express 		= require('express');
 
 var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenticator.js'));

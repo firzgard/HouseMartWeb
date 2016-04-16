@@ -2,9 +2,19 @@
 
 // newPost angular controller module
 
-var newPostControllers = angular.module('HouseMart.NewPostControllers', ['HouseMart.APIServices']);
+var newPostControllers = angular.module('HouseMart.NewPostControllers', [
+	'uiGmapgoogle-maps',
+	'HouseMart.APIServices'
+]);
 
-newPostControllers.controller('NewPostController', ['$uibModal', function ($uibModal) {
+newPostControllers.config(['uiGmapGoogleMapApiProvider',function(uiGmapGoogleMapApiProvider) {
+	 uiGmapGoogleMapApiProvider.configure({
+	 	key: 'AIzaSyBFIj2SYhMGjpb5wiMjh0NKdBd5UgO1zaU',
+		libraries: 'weather,geometry,places,visualization'
+	});
+}])
+
+newPostControllers.controller('NewPostController', function ($scope, $postService, $uibModal, uiGmapGoogleMapApi) {
 
 	this.$uibModal = $uibModal;
 
@@ -21,32 +31,71 @@ newPostControllers.controller('NewPostController', ['$uibModal', function ($uibM
 			}
 		});
 
-		modalInstance.result.then(function (selectedItem) {
-
+		modalInstance.result.then(function () {
+			$scope.PostLoaderController.newPostCreated = true;
+			$scope.PostLoaderController.posts = $postService.refreshAuthorizedPosts();
 		});
 	};
-}]);
+});
 
-newPostControllers.controller('NewPostModalController', ['$uibModalInstance', '$postService', '$provinceService', '$districtService', '$log',
-	function ($uibModalInstance, $postService, $provinceService, $districtService) {
+newPostControllers.controller('NewPostModalController',
+	function ($scope, $uibModalInstance, $postService, $provinceService, $districtService, uiGmapGoogleMapApi) {
+
+		var thisScope = this;
 
 		this.provinces = $provinceService.getProvinces();
 		this.districts = $districtService.getDistricts();
+
 		this.newPost = {
 			type: 1
 		};
 
+		uiGmapGoogleMapApi.then(function(maps) {
+
+			maps.visualRefresh = true;
+
+			thisScope.map = {
+				center: { latitude: 13.7878915, longitude: 109.3186302 },
+				events: {
+					click: function (map, eventName, eventArgs) {
+
+						if (thisScope.marker) {
+							thisScope.marker.coords = { latitude: eventArgs[0].latLng.lat(), longitude: eventArgs[0].latLng.lng() };
+						} else {
+							
+							thisScope.marker = {
+								id: 'houseMarker',
+								coords: { latitude: eventArgs[0].latLng.lat(), longitude: eventArgs[0].latLng.lng() },
+								options: {
+									animation: 1,
+									draggable: true
+								}
+							};
+						}
+
+						$scope.$apply()
+					}
+				},
+				zoom: 4
+			};
+		});
+
 		this.submit = function () {
+
+			if (this.marker) {
+				this.newPost.longitude = this.marker.coords.longitude;
+				this.newPost.latitude = this.marker.coords.latitude;
+			}
 
 			$postService.put(this.newPost, function(value, responseHeaders){
 				$uibModalInstance.close();
 
-			}), function(httpResponse) {
-				this.putError = true;
-			};
+			}, function(httpResponse) {
+				thisScope.putError = true;
+			});
 		};
 
 		this.cancel = function () {
 			$uibModalInstance.dismiss('Cancel');
 		};
-	}]);
+	});

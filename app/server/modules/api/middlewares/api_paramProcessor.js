@@ -1,3 +1,8 @@
+// api_paramProcessor.js
+// Check and process params passed to api router
+
+"use strict";
+
 module.exports = {
 	posts: {
 		get: function(req, res, next){

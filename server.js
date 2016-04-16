@@ -3,6 +3,8 @@
 // BASE SETUP
 // ================================================
 
+"use strict";
+
 //Global utils
 global.makeRootPath = function(relativeURI) {
     return __dirname + '/' + relativeURI;
@@ -23,7 +25,7 @@ global.configs			= require(makeRootPath('app/server/shared/data/configs.js'));
 // Configs
 
 // Create express application instance
-expressApp	= express();
+var expressApp	= express();
 
 
 expressApp.locals.basedir		= __dirname

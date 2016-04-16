@@ -23,3 +23,11 @@
 	border-radius: 4px;
 	box-shadow: 0 10px 20px hsla(0, 0%, 0%, 0.2);
 }
+
+.new-post-modal .angular-google-map-container { 
+  height: 300px;
+}
+
+.post-detail .angular-google-map-container { 
+  height: 500px;
+}

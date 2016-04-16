@@ -1,3 +1,7 @@
+"use strict";
+
+// Keep all commonly used constants here.
+
 module.exports = {
 	// The default port used to run this app on.
 	port: 3000,
