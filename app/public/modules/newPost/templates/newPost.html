@@ -1,0 +1,92 @@
+<form name="newPost" ng-submit="NewPostModalController.submit()">	
+	<div class="modal-header">
+		<h3 class="modal-title">New Post FTW!!</h3>
+	</div>
+	<div class="modal-body row">
+
+		<!-- Alert for posting unsuccessfully -->
+		<div class="col-md-12" ng-if="NewPostModalController.putError">
+			<uib-alert type="danger" dismiss-on-timeout="5000" close="NewPostModalController.putError = false">Error! A team of armed monkeys is preventing us creating new post! Try again later!</uib-alert>
+		</div>
+
+		<!-- Right Column -->
+		<div class="col-md-6">
+			<!-- Title -->
+			<div class="form-group">
+				<label class="control-label" for="new-post-title">Title*</label>
+				<input type="text" ng-model="NewPostModalController.newPost.title" name="title" ng-maxlength="50" ng-minlength="10" placeholder="Title" ng-required="true" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-title" >
+				<p ng-show="newPost.title.$error.minlength" class="help-block">Title must be longer than 10 characters!</p>
+				<p ng-show="newPost.title.$error.maxlength" class="help-block">Title must be shorter than 50 characters!</p>
+				<p ng-show="newPost.title.$error.required && newPost.title.$touched" class="help-block">Required field!</p>
+			</div>
+
+			<!-- Address -->
+			<div class="form-group">
+				<label for="new-post-address">Address*</label>
+				<input type="text" ng-model="NewPostModalController.newPost.address" name="address" ng-maxlength="150" ng-minlength="10" placeholder="e.g. 10 Nguyễn Trãi" ng-required="true" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-address" >
+				<p ng-show="newPost.address.$error.minlength" class="help-block">Address must be longer than 10 characters!</p>
+				<p ng-show="newPost.address.$error.maxlength" class="help-block">Address must be shorter than 150 characters!</p>
+				<p ng-show="newPost.address.$error.required && newPost.address.$touched" class="help-block">Required field!</p>
+			</div>
+
+			<!-- OwnerName -->
+			<div class="form-group">
+				<label for="new-post-owner-name">Owner Name</label>
+				<input type="text" ng-model="NewPostModalController.newPost.ownerName" name="ownerName" ng-maxlength="60" placeholder="Owner Name" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-owner-name" >
+				<p ng-show="newPost.ownerName.$error.maxlength" class="help-block">Owner Name must be shorter than 60 characters!</p>
+			</div>
+
+			<!-- Phone -->
+			<div class="form-group">
+				<label for="new-post-phone">Phone</label>
+				<input type="tel" ng-model="NewPostModalController.newPost.phone" name="phone" ng-maxlength="20" placeholder="e.g. 1234ABC987XYZ" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-phone" >
+				<p ng-show="newPost.phone.$error.maxlength" class="help-block">Phone must be shorter than 20 characters!</p>
+			</div>
+
+			<!-- Area -->
+			<div class="form-group">
+				<label for="new-post-area">Land Area</label>
+				<div class="input-group">
+					<input type="number" ng-model="NewPostModalController.newPost.area" name="area" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-area" >
+					<span class="input-group-addon">m<sup>2</sup></span>
+				</div>
+				<p ng-show="newPost.area.$invalid" class="help-block">Area must be a number with less than 4 decimal places!!</p>
+			</div>
+
+			<!-- Price -->
+			<div class="form-group">
+				<label for="new-post-price">Price</label>
+				<div class="input-group">
+				<span class="input-group-addon">$</span>
+					<input type="number" ng-model="NewPostModalController.newPost.price" name="price" ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/" step="0.001" placeholder="e.g. 9999.999" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-price" >
+				</div>
+				<p ng-show="newPost.price.$invalid" class="help-block">Price must be a number with less than 4 decimal places!!</p>
+			</div>
+
+			<!-- Description -->
+			<div class="form-group">
+				<label for="new-post-description">Description</label>
+				<textarea type="tel" ng-model="NewPostModalController.newPost.description" name="description" ng-maxlength="1000" placeholder="Description" ng-model-options="{ updateOn: 'blur' }" class="form-control" id="new-post-description" style="resize:vertical;"></textarea>
+				<p ng-show="newPost.description.$error.description" class="help-block">Description must be shorter than 1000 characters!</p>
+			</div>
+		</div>
+
+		<!-- Right Column -->
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="new-post-provinceID">Province</label>
+				<select ng-model="NewPostModalController.newPost.provinceID" name="provinceID" ng-options="opt.provinceID as opt.provinceName for opt in NewPostModalController.provinces | orderBy: 'provinceName'" ng-model-options="{ updateOn: 'blur' }" ng-required="true" class="form-control"></select>
+				<p ng-show="newPost.provinceID.$error.required && newPost.provinceID.$touched" class="help-block">Required field!</p>
+			</div>
+			<div class="form-group">
+				<label for="new-post-districtID">District</label>
+				<select ng-model="NewPostModalController.newPost.districtID" name="districtID" ng-options="opt.districtID as opt.districtName for opt in (NewPostModalController.districts | filter: {provinceID: NewPostModalController.newPost.provinceID}: true | orderBy: 'districtName')" ng-model-options="{ updateOn: 'blur' }" ng-required="true" ng-disabled="newPost.provinceID.$invalid" class="form-control"></select>
+				<p ng-show="newPost.districtID.$error.required && newPost.districtID.$touched" class="help-block">Required field!</p>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="submit" class="btn btn-primary" ng-disabled="newPost.$invalid" value="Submit" />
+		<input type="button" ng-click="NewPostModalController.cancel()" class="btn btn-warning" value="Cancel" />
+	</div>
+</form>

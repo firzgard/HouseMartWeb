@@ -1,46 +1,52 @@
-angular.module('ui.bootstrap.demo').controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
+'use strict';
 
-	$scope.items = ['item1', 'item2', 'item3'];
+// newPost angular controller module
 
-	$scope.open = function (size) {
+var newPostControllers = angular.module('HouseMart.NewPostControllers', ['HouseMart.APIServices']);
+
+newPostControllers.controller('NewPostController', ['$uibModal', function ($uibModal) {
+
+	this.$uibModal = $uibModal;
+
+	this.createPost = function () {
 
 		var modalInstance = $uibModal.open({
 			templateUrl: '/assets/modules/newPost/templates/newPost.html',
-			controller: 'NewPostController',
-			size: size,
+			controller: 'NewPostModalController as NewPostModalController',
+			size: 'lg',
 			resolve: {
 				items: function () {
-					return $scope.items;
+					return;
 				}
 			}
 		});
 
 		modalInstance.result.then(function (selectedItem) {
-			$scope.selected = selectedItem;
+
 		});
 	};
+}]);
 
-	$scope.toggleAnimation = function () {
-		$scope.animationsEnabled = !$scope.animationsEnabled;
-	};
+newPostControllers.controller('NewPostModalController', ['$uibModalInstance', '$postService', '$provinceService', '$districtService', '$log',
+	function ($uibModalInstance, $postService, $provinceService, $districtService) {
 
-});
+		this.provinces = $provinceService.getProvinces();
+		this.districts = $districtService.getDistricts();
+		this.newPost = {
+			type: 1
+		};
 
-// Please note that $uibModalInstance represents a modal window (instance) dependency.
-// It is not the same as the $uibModal service used above.
+		this.submit = function () {
 
-angular.module('ui.bootstrap.demo').controller('NewPostController', function ($scope, $uibModalInstance, items) {
+			$postService.put(this.newPost, function(value, responseHeaders){
+				$uibModalInstance.close();
 
-	$scope.items = items;
-	$scope.selected = {
-		item: $scope.items[0]
-	};
+			}), function(httpResponse) {
+				this.putError = true;
+			};
+		};
 
-	$scope.ok = function () {
-		$uibModalInstance.close($scope.selected.item);
-	};
-
-	$scope.cancel = function () {
-		$uibModalInstance.dismiss('Cancel');
-	};
-});
+		this.cancel = function () {
+			$uibModalInstance.dismiss('Cancel');
+		};
+	}]);

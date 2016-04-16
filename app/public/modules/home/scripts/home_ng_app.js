@@ -5,11 +5,7 @@
 var houseMart = angular.module('HouseMart', [
 	'ui.bootstrap',
 	'ui.router',
-	'angularUtils.directives.dirPagination',
-	'dcbImgFallback' ,
-	'HouseMart.PostLoaderControllers',
-	'HouseMart.EmptyToEndFilter',
-	'HouseMart.APIServices'
+	'HouseMart.PostLoaderControllers'
 ]);
 
 houseMart.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -20,12 +16,18 @@ houseMart.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
 		.state('main', {
 			url: "/",
 			templateUrl: "/assets/modules/postLoader/templates/postLoader.html",
-			controller: 'PostLoaderController'
+			controller: 'PostLoaderController as PostLoaderController'
 		})
 		.state('main.postDetail', {
 			url: "posts/{postID:int}",
 			parent: 'main',
 			templateUrl: "/assets/modules/postLoader/templates/postDetail.html",
-			controller: 'PostDetailController'
+			controller: 'PostDetailController as PostDetailController'
 		});
 }])
+
+houseMart.controller('MainController', ['$window', function($window){
+	this.location = {
+		path: $window.location.pathname
+	};
+}]);

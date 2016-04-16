@@ -1,19 +1,25 @@
 <div id="post-loader" ng-hide="showDetail" >
+
 	<div class="paginator-option">
+		<!-- Button to creating modal for creating new post -->
+		<button ng-if="MainController.location.path.toUpperCase() == '/MANAGEMENT'" ng-controller="NewPostController as NewPostController" type="button" class="btn btn-default" id="new-post" ng-click="NewPostController.createPost()">New Post</button>
+
 		<div class="form-group">
 			<label>Order By:</label>
-			<select ng-model="paginator.orderProp" ng-options="opt.value as opt.label for opt in paginator.orderOptions" class="form-control"></select>
+			<select ng-model="PostLoaderController.paginator.orderProp" ng-options="opt.value as opt.label for opt in PostLoaderController.paginator.orderOptions" class="form-control"></select>
 		</div>
+
 		<div class="form-group">
 			<label>Posts per Page:</label>
-			<select ng-model="paginator.itemsPerPage" ng-options="opt as opt for opt in [5, 6, 7, 8, 9, 10]" class="form-control"></select>
+			<select ng-model="PostLoaderController.paginator.itemsPerPage" ng-options="opt as opt for opt in [5, 6, 7, 8, 9, 10]" class="form-control"></select>
 		</div>
 	</div>
+
 	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
 
 	<div id="posts">
-		<a class="post-item row" dir-paginate="post in posts | orderBy:paginator.orderProp.expression:paginator.orderProp.reverse | emptyToEnd: paginator.orderProp.expression | itemsPerPage: paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" ng-click="showDetail = ! showDetail" >
-			<div class="col-sm-4 post-col	">
+		<a class="post-item row" dir-paginate="post in PostLoaderController.posts | orderBy:PostLoaderController.paginator.orderProp.expression:PostLoaderController.paginator.orderProp.reverse | emptyToEnd: PostLoaderController.paginator.orderProp.expression | itemsPerPage: PostLoaderController.paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" ng-click="showDetail = !showDetail" >
+			<div class="col-sm-4 post-col">
 				<img class="post-thumbnail-img" ng-src="{{post.image1 || 'assets/shared/imgs/home-icon.png'}}" fallback-src="assets/shared/imgs/home-icon.png" alt="No Image" loading-src/>
 			</div>
 			<div class="col-sm-8 post-col">

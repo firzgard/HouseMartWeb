@@ -28,6 +28,13 @@ router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstra
 router.use('/libs/jquery', express.static(makeRootPath('node_modules/jquery/dist')));
 router.use('/libs/waypoints', express.static(makeRootPath('node_modules/waypoints/lib')));
 
+// Route for providing assets that requires rendering
+
+router.use('/templates/postLoader.html', authenticator.authorize, function(req, res){
+	return res.render(makeRootPath('app/server/modules/postLoader/templates/postLoader.jade'), req.authorization);
+});
+
+
 // Route for providing static assets
 router.use('/', express.static(makeRootPath('app/public')));
 

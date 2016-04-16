@@ -47,9 +47,9 @@ router.route('/')
 /*					// Update images' url
 					var updateParam = {
 						postID: result.recordSet[0].postID,
-						image1: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image1.jpeg',
-						image2: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image2.jpeg',
-						image3: 'assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image3.jpeg'
+						image1: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image1.jpeg',
+						image2: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image2.jpeg',
+						image3: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image3.jpeg'
 					};
 
 					databaseUtils.posts.postDetail.patch(updateParam)

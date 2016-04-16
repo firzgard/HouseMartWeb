@@ -1,6 +1,5 @@
 nav.navbar.navbar-default
 	.container-fluid
-		// Brand and toggle get grouped for better mobile display
 		.navbar-header
 			button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
 				span.sr-only Toggle navigation
@@ -8,14 +7,11 @@ nav.navbar.navbar-default
 				span.icon-bar
 				span.icon-bar
 		.navbar-header
-			a.navbar-brand(href='') HouseMart
-		// Collect the nav links, forms, and other content for toggling
+			a.navbar-brand(href='/home') HouseMart
 		#bs-example-navbar-collapse-1.collapse.navbar-collapse
 			ul.nav.navbar-nav
 				li
-					a(href='')
-						| About 
-						span.sr-only (current)
+					a(href='') About
 				li
 					a(href='') Contact
 			ul.nav.navbar-nav.navbar-right
@@ -30,9 +26,12 @@ nav.navbar.navbar-default
 								span.caret
 							ul(uib-dropdown-menu='', aria-labelledby='simple-dropdown')
 								li
-									a(href='') Management
+									a(href='/management#/posts') Manage Posts
+								if role == configs.roles.admin
+									li
+										a(href='/management#/users') Manage Users
+								li
+									a(href='/management#/account') Account Settings
 								li.divider(role='separator')
 								li
 									a(href='') Logout
-		// /.navbar-collapse
-	// /.container-fluid

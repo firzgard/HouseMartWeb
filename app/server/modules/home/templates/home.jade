@@ -11,7 +11,7 @@ html(lang='en', ng-app='HouseMart')
 		link(rel='stylesheet', href='/assets/modules/postLoader/styles/postLoader.css')
 		link(rel='stylesheet', href='/assets/shared/styles/css/main.css')
 
-	body(ng-cloak)
+	body(ng-cloak ng-controller="MainController as MainController")
 		header
 			include /app/server/modules/headerBar/templates/headerBar.jade
 

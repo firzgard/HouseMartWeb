@@ -11,7 +11,7 @@ html(lang='en', ng-app="HouseMart")
 		link(rel='stylesheet', href='/assets/modules/postLoader/styles/postLoader.css')
 		link(rel='stylesheet', href='/assets/shared/styles/css/main.css')
 
-	body(ng-cloak)
+	body(ng-cloak ng-controller="MainController as MainController")
 		header
 			include /app/server/modules/headerBar/templates/headerBar.jade
 
@@ -25,6 +25,7 @@ html(lang='en', ng-app="HouseMart")
 					#post-container
 						div(ui-view)
 
+		script(src='/assets/libs/jquery/jquery.js')
 		script(src='/assets/libs/waypoints/noframework.waypoints.js')
 		script(src='/assets/libs/angular/angular.js')
 		script(src='/assets/libs/angular-ui-router/angular-ui-router.js')
@@ -34,6 +35,7 @@ html(lang='en', ng-app="HouseMart")
 		script(src='/assets/libs/angular-waypoints/angular-waypoints.js')
 		script(src='/assets/shared/libs/angular-img-fallback/angular.dcb-img-fallback.js')
 		script(src='/assets/shared/scripts/ng_restServices.js')
-		script(src='/assets/modules/postLoader/scripts/postLoader_ng_controller.js')
 		script(src='/assets/shared/scripts/emptyToEnd_ng_filter.js')
+		script(src='/assets/modules/newPost/scripts/newPost_ng_controller.js')
+		script(src='/assets/modules/postLoader/scripts/postLoader_ng_controller.js')
 		script(src='/assets/modules/management/scripts/management_ng_app.js')

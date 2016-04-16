@@ -6,10 +6,36 @@ module.exports = {
 
 			// Check unrequired params
 			{
+				if(typeof req.query.getAuthorizedPosts !== 'undefined') {
+					if (req.query.getAuthorizedPosts.toUpperCase() === 'TRUE') {
+						switch (req.authorization.role) {
+							case configs.roles.admin:
+								break;
+							case configs.roles.user:
+								preparedParams.creatorID = req.authorization.userID;
+								break;
+							case configs.roles.guest:
+								return res.sendStatus(403);
+								break;
+						}
+					}
+				}
 				if(typeof req.query.creatorID !== 'undefined') {
-					preparedParams.creatorID = Number.parseInt(req.query.creatorID, 10);
-					if(Number.isNaN(preparedParams.creatorID)) {
+					req.query.creatorID = Number.parseInt(req.query.creatorID, 10);
+					if(Number.isNaN(req.query.creatorID)) {
 						return res.sendStatus(400);
+					} else {
+						switch (req.authorization.role) {
+							case configs.roles.user:
+								if (req.query.creatorID !== req.authorization.userID) {
+									return res.sendStatus(403);
+									break;
+								}
+
+							case configs.roles.admin:
+								preparedParams.creatorID = req.query.creatorID;
+								break;
+						}
 					}
 				}
 				if(typeof req.query.districtID !== 'undefined') {

@@ -2,13 +2,19 @@
 
 // postLoader angular controller module
 
-var postLoaderControllers = angular.module('HouseMart.PostLoaderControllers', []);
+var postLoaderControllers = angular.module('HouseMart.PostLoaderControllers', [
+	'angularUtils.directives.dirPagination',
+	'dcbImgFallback',
+	'HouseMart.APIServices',
+	'HouseMart.EmptyToEndFilter'
+]);
 
-postLoaderControllers.controller('PostLoaderController', ['$scope', '$postService',
-	function($scope, $postService){
+postLoaderControllers.controller('PostLoaderController', ['$postService', '$scope',
+	function($postService, $scope){
 
-		$scope.posts = $postService.getPosts();
-		$scope.paginator = {
+		$scope.showDetail = false;
+		this.posts = $postService.getPosts();
+		this.paginator = {
 			itemsPerPage: 10,
 			orderProp: {
 				expression: 'dateUpdate',
@@ -73,7 +79,6 @@ postLoaderControllers.controller('PostLoaderController', ['$scope', '$postServic
 				}
 			]
 		};
-		$scope.showDetail = false;
 
 	}]);
 
@@ -81,9 +86,9 @@ postLoaderControllers.controller('PostDetailController', ['$scope', '$state', '$
 	function($scope, $state, $stateParams, $postDetailService){
 
 		$scope.$parent.showDetail = true;
-		$scope.postDetail = $postDetailService.getPostDetail($stateParams.postID);
+		this.postDetail = $postDetailService.getPostDetail($stateParams.postID);
 
-		$scope.goBack = function() {
+		this.goBack = function() {
 			$scope.$parent.showDetail = false;
 			$state.go('main');
 		}
