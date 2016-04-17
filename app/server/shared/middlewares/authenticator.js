@@ -35,6 +35,7 @@ module.exports = {
 								password: resultSet[0].password
 							};
 
+							// Token expire in 1 hour
 							var token = jwt.sign(payload, configs.secret, {
 								expiresIn: '1h'
 							});
@@ -86,6 +87,24 @@ module.exports = {
 					// Decoded unsuccessfully
 					return res.status(401).send('Authentication failed.');
 				} else {
+
+					// If the token is less than 10min to timeout, refresh it
+					if ((payload.exp - ( Date.now() / 1000 )) < (10 * 60))
+					{
+							// Make a jwt
+							// Token expire in 1 hour
+							var token = jwt.sign({
+								username: payload.username,
+								password: payload.password
+							}, configs.secret, {
+								expiresIn: '1h'
+							});
+
+							res.cookie('token', token, {
+								maxAge: (60 * 60 * 1000),
+								httpOnly: true
+						});
+					}
 
 					var mssqlConnector = new mssql.Connection(configs.dbConfig);
 

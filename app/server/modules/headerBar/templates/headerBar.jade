@@ -27,11 +27,11 @@ nav.navbar.navbar-default
 							ul(uib-dropdown-menu='', aria-labelledby='simple-dropdown')
 								li
 									a(href='/management#/posts') Manage Posts
-								if role == configs.roles.admin
+								if role === configs.roles.admin
 									li
 										a(href='/management#/users') Manage Users
 								li
 									a(href='/management#/account') Account Settings
 								li.divider(role='separator')
 								li
-									a(href='') Logout
+									a(href='/logout') Logout

@@ -35,6 +35,15 @@ router.get('/home', authenticator.authorize, function(req, res){
 // login page
 router.use('/login', routerLogin);
 
+// Logout by removing jwt's cookie
+router.use('/logout', function(req, res) {
+	res.cookie('token', {}, {
+		maxAge: 1
+	});
+	
+	res.redirect('/home');
+});
+
 // Register page
 router.use('/signup', routerSignup);
 

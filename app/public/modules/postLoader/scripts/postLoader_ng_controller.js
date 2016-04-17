@@ -100,10 +100,37 @@ postLoaderControllers.controller('PostLoaderController',
 	});
 
 postLoaderControllers.controller('PostDetailController',
-	function($scope, $state, $stateParams, $postDetailService){
+	function($scope, $state, $stateParams, $postDetailService, uiGmapGoogleMapApi){
+
+		var thisScope = this;
 
 		$scope.PostLoaderController.showDetail = true;
-		this.post = $postDetailService.getPost($stateParams.postID);
+		
+		thisScope.displayImg = 1;
+
+		thisScope.post = $postDetailService.getPost($stateParams.postID, function(value, responseHeaders){
+
+			if (thisScope.post.longitude && thisScope.post.latitude) {
+
+				uiGmapGoogleMapApi.then(function(maps) {
+
+					maps.visualRefresh = true;
+
+					thisScope.map = {
+						center: { latitude: thisScope.post.latitude, longitude: thisScope.post.longitude },
+						zoom: 18
+					};
+
+					thisScope.marker = {
+						id: 'houseMarker',
+						coords: { latitude: thisScope.post.latitude, longitude: thisScope.post.longitude },
+						options: {
+							animation: 1
+						}
+					};
+				});
+			}
+		});
 
 		this.goBack = function() {
 			$scope.PostLoaderController.showDetail = false;
@@ -120,6 +147,8 @@ postLoaderControllers.controller('PostEditorController',
 
 		thisScope.provinces = $provinceService.getProvinces();
 		thisScope.districts = $districtService.getDistricts();
+
+		thisScope.displayImg = 1;
 
 		thisScope.post = $postDetailService.getPostForEdit($stateParams.postID, function(value, responseHeaders){
 
@@ -183,9 +212,7 @@ postLoaderControllers.controller('PostEditorController',
 						$scope.$apply()
 					}
 				};
-
-		});
-	
+			});
 		});
 
 		this.goBack = function() {

@@ -33,6 +33,7 @@ router.route('/')
 
 		if(req.authentication.success) {
 
+			// Token expire in 1 hour
 			res.cookie('token', req.authentication.token, {
 				maxAge: (60 * 60 * 1000),
 				httpOnly: true

@@ -31,3 +31,8 @@
 .post-detail .angular-google-map-container { 
   height: 500px;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

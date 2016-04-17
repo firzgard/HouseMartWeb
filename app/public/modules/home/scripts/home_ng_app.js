@@ -3,6 +3,7 @@
 // Homepage angular app module
 
 var houseMart = angular.module('HouseMart', [
+	'ngAnimate',
 	'ui.bootstrap',
 	'ui.router',
 	'HouseMart.PostLoaderControllers'

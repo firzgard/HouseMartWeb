@@ -27,6 +27,7 @@ router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstra
 
 router.use('/libs/angular', express.static(makeRootPath('node_modules/angular')));
 router.use('/libs/angular-simple-logger', express.static(makeRootPath('node_modules/angular-google-maps/node_modules/angular-simple-logger/dist')));
+router.use('/libs/angular-animate', express.static(makeRootPath('node_modules/angular-animate')));
 router.use('/libs/angular-resource', express.static(makeRootPath('node_modules/angular-resource')));
 router.use('/libs/angular-ui-router', express.static(makeRootPath('node_modules/angular-ui-router/release')));
 router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modules/angular-ui-bootstrap/dist')));

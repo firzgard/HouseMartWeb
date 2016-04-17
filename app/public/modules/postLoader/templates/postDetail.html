@@ -1,2 +1,57 @@
-<a ng-click="PostDetailController.goBack()" >ase</a>
-{{PostDetailController.postDetail.postID}}
+<div>
+	<a ng-click="PostDetailController.goBack()" >ase</a>
+	{{PostDetailController.postDetail.postID}}
+
+	<!-- Title-->
+	<div class="post-row">
+		<span class="post-detail-title">{{PostDetailController.post.title}}</span>
+	</div>
+
+	<div class="post-row row">
+		<div class="post-image-container col-sm-10"><img ng-show="PostDetailController.displayImg === 1" ng-src="{{PostDetailController.post.image1 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-detail-img"/><img ng-show="PostDetailController.displayImg === 2" ng-src="{{PostDetailController.post.image2 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-detail-img"/><img ng-show="PostDetailController.displayImg === 3" ng-src="{{PostDetailController.post.image3 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-detail-img"/></div>
+		
+		<div class="post-thumbnail-container col-sm-2">
+			<div ng-click="PostDetailController.displayImg = 1" class="post-image-cell"><img ng-src="{{PostDetailController.post.image1 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-img"/></div>
+			<div ng-click="PostDetailController.displayImg = 2" class="post-image-cell"><img ng-src="{{PostDetailController.post.image2 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-img"/></div>
+			<div ng-click="PostDetailController.displayImg = 3" class="post-image-cell"><img ng-src="{{PostDetailController.post.image3 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" class="post-img"/></div>
+		</div>
+	</div>
+
+	<div class="address-row row" style="background-color: #3b4144; color: white;">
+		<!-- Address-->
+		<span class="post-detail-address col-sm-12">
+			{{PostDetailController.post.address}}, {{PostDetailController.post.districtName}}, {{PostDetailController.post.provinceName}}
+		</span>
+		<!-- Price-->
+		<span class="post-detail-important col-sm-4 col-sm-offset-1">At: {{PostDetailController.post.price | currency : $ : 3}}</span>
+		<!-- Size -->
+		<span class="post-detail-important col-sm-4">Structure Size: {{PostDetailController.post.area | number : 3}} m<sup>2</sup></span>
+	</div>
+
+	<div class="post-row row">
+		<!-- Description-->
+		<p style="white-space: pre-wrap;" >{{PostDetailController.post.description}}</p>
+	</div>
+
+	<div class="post-row row">
+		<span class="col-sm-2" style="font-weight: bold; font-size: 1.2em">Contact</span>
+		<div class="col-sm-3">
+			<!-- OwnerName-->
+			<span class="glyphicon glyphicon-user"></span>&nbsp&nbsp{{PostDetailController.post.ownerName}}
+		</div>
+		<div class="col-sm-3">
+			<!-- Phone-->
+			<span class="glyphicon glyphicon-earphone"></span>&nbsp&nbsp{{PostDetailController.post.phone}}
+		</div>
+	</div>
+
+	<div class="row post-row">
+		<!-- Google Map-->
+		<div class="form-group">
+			<ui-gmap-google-map center="PostDetailController.map.center" zoom="PostDetailController.map.zoom" events="PostDetailController.map.events">
+				<ui-gmap-marker coords="PostDetailController.marker.coords" options="PostDetailController.marker.options" idkey="'houseMarker'"></ui-gmap-marker>
+			</ui-gmap-google-map>
+		</div>
+	</div>
+</div>
+	

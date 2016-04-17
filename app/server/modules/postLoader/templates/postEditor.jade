@@ -1,12 +1,38 @@
-a(ng-click="PostEditorController.goBack()") Posts
-
 form(name='post', ng-submit='PostEditorController.save()')
-	.row.post-data
+
+	.row.post-row.vertical-align
+		.col-sm-6
+			a(ng-click="PostEditorController.goBack()") Posts
+		.col-sm-6.text-right
+			if role === configs.roles.admin
+				input.btn.btn-danger(ng-click='PostEditorController.delete' type='button' ,value='Delete')
+				| &nbsp&nbsp&nbsp
+			.btn-group
+				input.btn.btn-default(ng-click='PostEditorController.reset()', type='button' ,value='Reset')
+				input.btn.btn-primary(ng-disabled='post.$invalid', type='submit' ,value='Save')
+
+	.row.post-row(ng-if='PostEditorController.updated || PostEditorController.updateError')
+		uib-alert(ng-if='PostEditorController.updated', type='success', close='PostEditorController.updated = false', role='alert') Updated successfully!!
+		uib-alert(ng-if='PostEditorController.updateError', type='danger', dismiss-on-timeout='5000', close='PostEditorController.updateError = false', role='alert') Error! A team of armed monkeys is preventing us from updating the post! Try again later!
+		
+	.row.post-row
 		// Left Column
-		.col-md-6
+		.col-sm-6
+			.post-thumbnail-container.horizontal
+				.post-image-cell.col-sm-4(ng-click='PostEditorController.displayImg = 1')
+					img.post-img(ng-src="{{PostEditorController.post.image1 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
+				.post-image-cell.col-sm-4(ng-click='PostEditorController.displayImg = 2')
+					img.post-img(ng-src="{{PostEditorController.post.image2 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
+				.post-image-cell.col-sm-4(ng-click='PostEditorController.displayImg = 3')
+					img.post-img(ng-src="{{PostEditorController.post.image3 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
+
+			.post-image-container
+				img.post-detail-img(ng-show='PostEditorController.displayImg === 1', ng-src="{{PostEditorController.post.image1 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
+				img.post-detail-img(ng-show='PostEditorController.displayImg === 2', ng-src="{{PostEditorController.post.image2 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
+				img.post-detail-img(ng-show='PostEditorController.displayImg === 3', ng-src="{{PostEditorController.post.image3 || '/assets/shared/imgs/home-icon.png'}}", fallback-src='/assets/shared/imgs/home-icon.png', alt='No Image')
 
 		// Right Column
-		.col-md-6
+		.col-sm-6
 			// Title
 			.form-group
 				label.control-label(for='post-title') Title*
@@ -16,63 +42,62 @@ form(name='post', ng-submit='PostEditorController.save()')
 				p.help-block(ng-show='post.title.$error.required && post.title.$touched') Required field!
 			// Address
 			.form-group
-				label(for='post-address') Address*
+				label.control-label(for='post-address') Address*
 				input#post-address.form-control(type='text', ng-model='PostEditorController.editedPost.address', name='address', ng-maxlength='150', ng-minlength='10', placeholder='e.g. 10 Nguyễn Trãi', ng-required='true', ng-model-options="{ updateOn: 'blur' }")
 				p.help-block(ng-show='post.address.$error.minlength') Address must be longer than 10 characters!
 				p.help-block(ng-show='post.address.$error.maxlength') Address must be shorter than 150 characters!
 				p.help-block(ng-show='post.address.$error.required && post.address.$touched') Required field!
-			// OwnerName
-			.form-group
-				label(for='post-owner-name') Owner Name
-				input#post-owner-name.form-control(type='text', ng-model='PostEditorController.editedPost.ownerName', name='ownerName', ng-maxlength='60', placeholder='Owner Name', ng-model-options="{ updateOn: 'blur' }")
-				p.help-block(ng-show='post.ownerName.$error.maxlength') Owner Name must be shorter than 60 characters!
-			// Phone
-			.form-group
-				label(for='post-phone') Phone
-				input#post-phone.form-control(type='tel', ng-model='PostEditorController.editedPost.phone', name='phone', ng-maxlength='20', placeholder='e.g. 1234ABC987XYZ', ng-model-options="{ updateOn: 'blur' }")
-				p.help-block(ng-show='post.phone.$error.maxlength') Phone must be shorter than 20 characters!
-			// Area
-			.form-group
-				label(for='post-area') Land Area
-				.input-group
-					input#post-area.form-control(type='number', ng-model='PostEditorController.editedPost.area', name='area', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
-					span.input-group-addon
-						| m
-						sup 2
-				p.help-block(ng-show='post.area.$invalid') Area must be a number with less than 4 decimal places!!
-			// Price
-			.form-group
-				label(for='post-price') Price
-				.input-group
-					span.input-group-addon $
-					input#post-price.form-control(type='number', ng-model='PostEditorController.editedPost.price', name='price', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
-				p.help-block(ng-show='post.price.$invalid') Price must be a number with less than 4 decimal places!!
+
+			.row
+				// Province ID
+				.form-group.col-sm-6
+					label.control-label(for='post-province-id') Province*
+					select#post-province-id.form-control(ng-model='PostEditorController.editedPost.provinceID', name='provinceID', ng-options="opt.provinceID as opt.provinceName for opt in PostEditorController.provinces | orderBy: 'provinceName'", ng-model-options="{ updateOn: 'default blur' }", ng-required='true')
+					p.help-block(ng-show='post.provinceID.$error.required && post.provinceID.$touched') Required field!
+				// District ID
+				.form-group.col-sm-6
+					label.control-label(for='post-district-id') District*
+					select#post-province-id.form-control(ng-model='PostEditorController.editedPost.districtID', name='districtID', ng-options="opt.districtID as opt.districtName for opt in (PostEditorController.districts | filter: {provinceID: PostEditorController.editedPost.provinceID}: true | orderBy: 'districtName')", ng-model-options="{ updateOn: 'default blur' }", ng-required='true', ng-disabled='post.provinceID.$invalid')
+					p.help-block(ng-show='post.districtID.$error.required && post.districtID.$touched') Required field!
+
+			.row
+				// OwnerName
+				.form-group.col-sm-6
+					label.control-label(for='post-owner-name') Owner Name
+					input#post-owner-name.form-control(type='text', ng-model='PostEditorController.editedPost.ownerName', name='ownerName', ng-maxlength='60', placeholder='Owner Name', ng-model-options="{ updateOn: 'blur' }")
+					p.help-block(ng-show='post.ownerName.$error.maxlength') Owner Name must be shorter than 60 characters!
+			
+				// Phone
+				.form-group.col-sm-6
+					label.control-label(for='post-phone') Phone
+					input#post-phone.form-control(type='tel', ng-model='PostEditorController.editedPost.phone', name='phone', ng-maxlength='20', placeholder='e.g. 1234ABC987XYZ', ng-model-options="{ updateOn: 'blur' }")
+					p.help-block(ng-show='post.phone.$error.maxlength') Phone must be shorter than 20 characters!
+			
+			.row
+				// Area
+				.form-group.col-sm-6
+					label.control-label(for='post-area') Structure Size
+					.input-group
+						input#post-area.form-control(type='number', ng-model='PostEditorController.editedPost.area', name='area', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
+						span.input-group-addon
+							| m
+							sup 2
+					p.help-block(ng-show='post.area.$invalid') Area must be a number with less than 4 decimal places!!
+				// Price
+				.form-group.col-sm-6
+					label.control-label(for='post-price') Price
+					.input-group
+						span.input-group-addon $
+						input#post-price.form-control(type='number', ng-model='PostEditorController.editedPost.price', name='price', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
+					p.help-block(ng-show='post.price.$invalid') Price must be a number with less than 4 decimal places!!
 			// Description
 			.form-group
-				label(for='post-description') Description
-				textarea#post-description.form-control(type='tel', ng-model='PostEditorController.editedPost.description', name='description', ng-maxlength='1000', rows='6', placeholder='Description', ng-model-options="{ updateOn: 'blur' }", style='resize:vertical;')
+				label.control-label(for='post-description') Description
+				textarea#post-description.form-control(type='text', ng-model='PostEditorController.editedPost.description', name='description', ng-maxlength='1000', rows='6', placeholder='Description', ng-model-options="{ updateOn: 'blur' }", style='resize:vertical;')
 				p.help-block(ng-show='post.description.$error.description') Description must be shorter than 1000 characters!
-			// Province ID
-			.form-group
-				label(for='post-provinceID') Province
-				select.form-control(ng-model='PostEditorController.editedPost.provinceID', name='provinceID', ng-options="opt.provinceID as opt.provinceName for opt in PostEditorController.provinces | orderBy: 'provinceName'", ng-model-options="{ updateOn: 'default blur' }", ng-required='true')
-				p.help-block(ng-show='post.provinceID.$error.required && post.provinceID.$touched') Required field!
-			// District ID
-			.form-group
-				label(for='post-districtID') District
-				select.form-control(ng-model='PostEditorController.editedPost.districtID', name='districtID', ng-options="opt.districtID as opt.districtName for opt in (PostEditorController.districts | filter: {provinceID: PostEditorController.editedPost.provinceID}: true | orderBy: 'districtName')", ng-model-options="{ updateOn: 'default blur' }", ng-required='true', ng-disabled='post.provinceID.$invalid')
-				p.help-block(ng-show='post.districtID.$error.required && post.districtID.$touched') Required field!
 
-	.row.post-data
+	.row.post-row
 		// Google Map
 		.form-group
 			ui-gmap-google-map(center='PostEditorController.map.center', zoom='PostEditorController.map.zoom', events='PostEditorController.map.events')
 				ui-gmap-marker(coords='PostEditorController.marker.coords', options='PostEditorController.marker.options', idkey="'houseMarker'")
-
-	.row.post-data(ng-if='PostEditorController.updated || PostEditorController.updateError')
-		uib-alert(ng-if='PostEditorController.updated', type='success', dismiss-on-timeout='5000', close='PostEditorController.updated = false', role='alert') Updated successfully!!
-		uib-alert(ng-if='PostEditorController.updateError', type='danger', dismiss-on-timeout='5000', close='PostEditorController.updateError = false', role='alert') Error! A team of armed monkeys is preventing us from updating the post! Try again later!
-
-	.row.text-right
-		input.btn.btn-default(ng-click='PostEditorController.reset()', type='button' ,value='Reset')
-		input.btn.btn-primary(ng-disabled='post.$invalid', type='submit' ,value='Save')

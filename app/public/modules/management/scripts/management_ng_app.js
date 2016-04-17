@@ -3,6 +3,7 @@
 // Management page angular app module
 
 var houseMart = angular.module('HouseMart', [
+	'ngAnimate',
 	'ui.bootstrap',
 	'ui.router',
 	'zumba.angular-waypoints',

@@ -1,3 +1,21 @@
+.post-loader.ng-hide-add {
+	opacity: 1;
+	transition: all 0.3s ease-in-out;
+}
+
+.post-loader.ng-hide-add-active {
+	opacity: 0;
+}
+
+.post-loader.ng-hide-remove {
+	opacity: 0;
+	transition: all 0.3s ease-in-out 0.3s;
+}
+
+.post-loader.ng-hide-remove-active {
+	opacity: 1;
+}
+
 #posts {
 	padding: 0;
 }
@@ -14,13 +32,12 @@ a.post-item {
 	border: 1px solid #ddd;
 	border-radius: 10px;
 	box-shadow: 0 5px 10px hsla(0, 0%, 0%, 0.2);
-	transition: all .2s ease-in-out;
 }
 
 a.post-item:hover {
 	color: white;
 	background: #286090;
-	border: 1px solid #204d74;
+	border-color: #204d74;
 	box-shadow: none;
 }
 
@@ -28,13 +45,14 @@ a.post-item:hover {
 	height: 100%;
 }
 
-.post-thumbnail-img {
+.post-img {
 	height: auto;
 	width: auto;
 	max-height: 100%;
 	max-width: 100%;
 	display: block;
 	margin: auto;
+	transition: all 5s ease-in-out;
 }
 
 .post-title {
@@ -69,14 +87,115 @@ a.post-item:hover {
 	margin-left: 1em;
 }
 
-/* ======= PostEditor ======== */
-.post-data:first-of-type {
+
+/* ======= PostDetail/Editor ======== */
+
+.post-detail.ng-hide-add {
+	opacity: 1;
+	transition: all 0.3s ease-in-out;
+}
+
+.post-detail.ng-hide-add-active {
+	opacity: 0;
+}
+
+.post-detail.ng-hide-remove {
+	opacity: 0;
+	transition: all 0.3s ease-in-out 0.3s;
+}
+
+.post-detail.ng-hide-remove-active {
+	opacity: 1;
+}
+
+.post-row {
+	border-bottom: 1px solid #ddd;
+	margin: 0 0 1em 0;
+	padding: 0 0 1em 0;
+}
+.post-row:first-of-type {
 	margin-top: 1em;
 	padding-top: 1em;
 	border-top: 1px solid #ddd;
 }
-.post-data {
-	border-bottom: 1px solid #ddd;
-	margin-bottom: 1em;
-	padding-bottom: 1em;
+
+.address-row {
+	margin: 0 0 2em 0;
+	padding: 1em 0 1em 0;
+}
+
+.post-image-container {
+	margin: 0;
+	border: thick solid #ddd;
+	padding: 0;
+	transition: all .2s ease-in-out;
+}
+
+.post-thumbnail-container {
+	margin: 0;
+	padding: 0;
+	transition: all .2s ease-in-out;
+}
+.post-thumbnail-container.horizontal {
+	display: inline-flex;
+	align-items: stretch;
+	justify-content: center;
+}
+
+.post-image-cell {
+	padding: 0;
+	border: thick solid #ddd;
+	display: inline-flex;
+	align-items: center;
+	transition: all .2s ease-in-out;
+}
+.post-image-cell:hover {
+	border-color: #204d74;
+}
+.post-image-cell:active {
+	border-color: #419641;
+}
+
+.post-detail-img {
+	height: 100%;
+	width: 100%;
+	max-height: 100%;
+	display: block;
+	margin: auto;
+}
+.post-detail-img.ng-hide-add {
+	width: 100%;
+	transition: all 0.7s ease-in-out;
+}
+.post-detail-img.ng-hide-add-active {
+	width: 0;
+}
+.post-detail-img.ng-hide-remove {
+	width: 0;
+	transition: all 0.7s ease-in-out 0.7s;
+}
+.post-detail-img.ng-hide-remove-active {
+	width: 100%;
+}
+
+.post-detail-title{
+	width: 100%;
+	display: block;
+	font-size: 2em;
+	font-weight: bold;
+	white-space: nowrap;
+    overflow: hidden;
+}
+
+.post-detail-address {
+	width: 100%;
+	display: block;
+	font-size: 2em;
+	white-space: nowrap;
+    overflow: hidden;
+}
+
+.post-detail-important {
+	font-weight: bold;
+	font-size: 1.5em;
 }
