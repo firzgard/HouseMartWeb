@@ -1,10 +1,14 @@
 <div>
-	<a ng-click="PostDetailController.goBack()" >ase</a>
+	<a ng-click="PostDetailController.goBack()" >Houses</a>
 	{{PostDetailController.postDetail.postID}}
 
 	<!-- Title-->
 	<div class="post-row">
 		<span class="post-detail-title">{{PostDetailController.post.title}}</span>
+		<div style="color:#999;">
+			<span>Posted On: {{PostDetailController.post.dateCreate | date: 'MMM d, y HH:mm:ss'}}&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+			<span>Last Updated: {{PostDetailController.post.dateUpdate | date: 'MMM d, y HH:mm:ss'}}</span>
+		</div>
 	</div>
 
 	<div class="post-row row">

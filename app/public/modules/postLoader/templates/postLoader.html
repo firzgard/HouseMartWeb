@@ -7,6 +7,7 @@
 		<!-- Button to open modal for creating new post -->
 		<button ng-if="MainController.location.path.toUpperCase() == '/MANAGEMENT'" ng-controller="NewPostController as NewPostController" type="button" class="btn btn-default" id="new-post" ng-click="NewPostController.createPost()">New Post</button>
 
+		<!-- Paginator selections -->
 		<div class="form-group">
 			<label>Order By:</label>
 			<select ng-model="PostLoaderController.paginator.orderProp" ng-options="opt.value as opt.label for opt in PostLoaderController.paginator.orderOptions" class="form-control"></select>
@@ -18,30 +19,43 @@
 		</div>
 	</div>
 
+	<!-- Paginator -->
 	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
 
+	<!-- Posts -->
 	<div id="posts">
-		<a class="post-item row" dir-paginate="post in PostLoaderController.posts | orderBy:PostLoaderController.paginator.orderProp.expression:PostLoaderController.paginator.orderProp.reverse | emptyToEnd: PostLoaderController.paginator.orderProp.expression | itemsPerPage: PostLoaderController.paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" >
+		<a dir-paginate="post in PostLoaderController.posts | searchPost: PostLoaderController.postFilter | filter: PostLoaderController.postFilter.general | orderBy:PostLoaderController.paginator.orderProp.expression:PostLoaderController.paginator.orderProp.reverse | emptyToEnd: PostLoaderController.paginator.orderProp.expression | itemsPerPage: PostLoaderController.paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" class="post-item row" ng-class="{'is-public': post.isPublic, 'not-public': !post.isPublic}">
 			<div class="col-sm-4 post-col">
 				<img class="post-img" ng-src="{{post.image1 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" loading-src/>
 			</div>
-			<div class="col-sm-8 post-col">
-				<span class="post-title">{{post.title}}</span>
-				<div ng-show="post.area">
-					<p class="post-label">Area: </p><p>{{post.area}}</p>
+			<div class="col-sm-8 post-col row">
+				<span class="post-title col-sm-12">{{post.title}}</span>
+
+				<div class="post-date col-sm-12">
+					<span ng-show="post.dateCreate">Posted On: {{post.dateCreate | date: 'MMM d, y'}}&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+					<span ng-show="post.dateUpdate">Last Updated: {{post.dateUpdate | date: 'MMM d, y'}}</span>
 				</div>
-				<div ng-show="post.dateUpdate">
-					<p class="post-label">Updated: </p><p>{{post.dateUpdate}}</p>
+				{{post.isPublic == true}} {{post.isPublic == false}} {{post.isPublic}}
+
+				<div class="col-sm-12 post-address">
+					{{post.address}}, {{post.districtName}}, {{post.provinceName}}
 				</div>
-				<div ng-show="post.dateCreate">
-					<p class="post-label">Posted: </p><p>{{post.dateCreate}}</p>
+
+				<div class="col-sm-11 col-sm-offset-1">
+					<p class="post-label" ng-show="post.area">Structure Size: {{post.area}} m<sup>2</sup></p>
 				</div>
 			</div>
 			<label class="price-tag" ng-show="post.price"><span>{{post.price | currency:$:0}}</span></label>
 		</a>
 	</div>
 
+	<!-- Paginator -->
 	<dir-pagination-controls max-size="8" direction-links="true" boundary-links="true" auto-hide="true" pagination-id="post-loader" template-url="assets/libs/angular-utils-pagination/dirPagination.tpl.html" class="paginator"></dir-pagination-controls>
+
+	<!-- Post Searcher -->
+	<div class="post-searcher" ng-controller="PostSearcherController as PostSearcherController">
+		<ng-include src="'/assets/modules/postLoader/templates/postSearcher.html'"></ng-include>
+	</div>
 </div>
 
 <div class="post-detail" ui-view ng-show="PostLoaderController.showDetail"></div>

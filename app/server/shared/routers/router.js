@@ -19,6 +19,8 @@ var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenti
 // ROUTING
 // ================================================
 
+router.use('/favicon.ico', express.static(makeRootPath('app/public/shared/imgs/favicon.ico')));
+
 // Route for providing static assets
 router.use('/assets', routerAssets);
 

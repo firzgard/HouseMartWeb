@@ -2,7 +2,7 @@ form(name='post', ng-submit='PostEditorController.save()')
 
 	.row.post-row.vertical-align
 		.col-sm-6
-			a(ng-click="PostEditorController.goBack()") Posts
+			a(ng-click="PostEditorController.goBack()") Houses
 		.col-sm-6.text-right
 			if role === configs.roles.admin
 				input.btn.btn-danger(ng-click='PostEditorController.delete' type='button' ,value='Delete')

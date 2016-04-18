@@ -96,13 +96,25 @@ apiServices.factory('$provinceService', function($APIService){
 	return {
 		getProvinces: function() {
 			if (!provinces) {
-				provinces = $APIService.provinces.get();	
+				provinces = $APIService.provinces.get({}, function() {
+					provinces.push({
+						provinceID: 9999,
+						provinceName: '======'
+					})
+					return;
+				});	
 			}
 
 			return provinces;
 		},
 		refreshProvinces: function() {
-			provinces = $APIService.provinces.get();
+			provinces = $APIService.provinces.get({}, function() {
+				provinces.push({
+					provinceID: '',
+					provinceName: ''
+				})
+				return;
+			});	
 			return provinces;
 		}
 	};
@@ -115,7 +127,7 @@ apiServices.factory('$districtService', function($APIService){
 	return {
 		getDistricts: function() {
 			if (!districts) {
-				districts = $APIService.districts.get();	
+				districts = $APIService.districts.get();		
 			}
 
 			return districts;

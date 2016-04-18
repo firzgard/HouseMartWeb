@@ -20,25 +20,59 @@
 	padding: 0;
 }
 
-a.post-item {
+.post-item {
 	color: black;
 	text-decoration: none;
 	display: block;
 	position: relative;
 	height: 15em;
-	padding: 1.5em 1em 1em 1em;
+	padding: 1.5em 0 1em 0;
 	margin-bottom: 1em;
 	background:  hsla(0, 0%, 100%, 0.8);
 	border: 1px solid #ddd;
 	border-radius: 10px;
 	box-shadow: 0 5px 10px hsla(0, 0%, 0%, 0.2);
+	transition: all 0.2s ease-in-out;
 }
-
-a.post-item:hover {
+.post-item.is-public {
+	background: hsla(120, 100%, 40%, 0.8);
+}
+.post-item.not-public {
+	background: hsla(0, 100%, 40%, 0.8);
+}
+.post-item:hover {
 	color: white;
 	background: #286090;
 	border-color: #204d74;
 	box-shadow: none;
+}
+
+.post-item.ng-leave {
+	opacity: 1;
+	height: 15em;
+	padding: 1.5em 0 1em 0;
+	margin-bottom: 1em;
+	transition: all 0.8s ease-in-out;
+}
+.post-item.ng-leave.ng-leave-active {
+	opacity: 0;
+	height: 0;
+	padding: 0;
+	margin-bottom: 0;
+}
+.post-item.ng-enter {
+	opacity: 0;
+	height: 0;
+	padding: 0;
+	margin-bottom: 0;
+	transition: all 0.8s ease-in-out;
+}
+.post-item.ng-enter.ng-enter-active {
+	opacity: 1;
+	height: 15em;
+	padding: 1.5em 0 1em 0;
+	margin-bottom: 1em;
+	transition: all 0.8s ease-in-o
 }
 
 .post-col {
@@ -52,7 +86,6 @@ a.post-item:hover {
 	max-width: 100%;
 	display: block;
 	margin: auto;
-	transition: all 5s ease-in-out;
 }
 
 .post-title {
@@ -62,8 +95,24 @@ a.post-item:hover {
 	font-weight: bold;
 	white-space: nowrap;
     overflow: hidden;
-	margin-bottom: 1em;
+	margin-bottom: 0.5em;
 	border-bottom: 1px solid #ddd;
+}
+
+.post-date {
+	color:#999;
+	display: block;
+	padding-bottom: 0.5em;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 0.5em;
+}
+
+.post-address {
+	width: 100%;
+	display: block;
+	font-size: 1.4em;
+	white-space: nowrap;
+    overflow: hidden;
 }
 
 .paginator {
@@ -198,4 +247,119 @@ a.post-item:hover {
 .post-detail-important {
 	font-weight: bold;
 	font-size: 1.5em;
+}
+
+/* ======= Searcher ======== */
+
+.searcher-open-button-container {
+	position: fixed;
+	top: 40vh;
+	left: 0;
+	display: flex;
+	align-items: center;
+	width: 6em;
+	height: 5em;
+	background: white;
+	padding-left: 1.5em;
+	border: 1px solid #ddd;
+	border-radius: 0 50px 50px 0;
+	z-index: 11;
+}
+.searcher-open-button-container.open {
+	left: -50em;
+}
+.searcher-open-button-container.open-add {
+	left: 0;
+	transition: left 1s ease-in-out;
+}
+.searcher-open-button-container.open-add-active {
+	left: -50em;
+}
+.searcher-open-button-container.open-remove {
+	left: -50em;
+	transition: left 1s ease-in-out;
+}
+.searcher-open-button-container.open-remove-active {
+	left: 0;
+}
+
+.searcher-container {
+	position: fixed;
+	top: 30vh;
+	left: -50em;
+	display: flex;
+	z-index: 10;
+}
+.searcher-container.open {
+	left: 0;
+}
+.searcher-container.open-add {
+	left: -50em;
+	transition: left 1s ease-in-out;
+}
+.searcher-container.open-add-active {
+	left: 0;
+}
+.searcher-container.open-remove {
+	left: 0;
+	transition: left 1s ease-in-out;
+}
+.searcher-container.open-remove-active {
+	left: -50em;
+}
+
+.searcher {
+	width: 40em;
+	background: hsla(0, 0%, 100%, 0.7);
+	padding: 2em 1em 1em 1em;
+	border: 1px solid #ddd;
+	box-shadow: 0 5px 10px hsla(0, 0%, 0%, 0.2);
+	transition: all 0.2s ease-in-out;
+}
+
+.search-field-label {
+	font-size: 1.2em;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.search-field-text {
+	white-space: nowrap;
+}
+
+.searcher-open-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5em;
+	color: white;
+	width: 2.5em;
+	height: 2.5em;
+	background: radial-gradient(circle, hsla(210, 100%, 80%, 1) 20%, hsla(210, 100%, 35%, 1) 100%);
+	border-radius: 50px;
+	transition: all 0.2s ease-in-out;
+}
+.searcher-open-button:hover {
+	background: radial-gradient(circle, hsla(210, 100%, 60%, 1), hsla(210, 100%, 20%, 1));
+}
+.searcher-open-button:active {
+	background: hsla(210, 100%, 80%, 1);
+}
+
+.searcher-close-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5em;
+	color: white;
+	width: 20px;
+	background: #286090;
+	border-radius: 0 10px 10px 0;
+	transition: all 0.2s ease-in-out;
+}
+.searcher-close-button:hover {
+	background: #3784c8;
+}
+.searcher-close-button:active {
+	background: #66b8ff;
 }

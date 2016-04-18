@@ -6,8 +6,10 @@ var postLoaderControllers = angular.module('HouseMart.PostLoaderControllers', [
 	'uiGmapgoogle-maps',
 	'angularUtils.directives.dirPagination',
 	'dcbImgFallback',
+	'HouseMart.PostSearcherControllers',
 	'HouseMart.APIServices',
-	'HouseMart.EmptyToEndFilter'
+	'HouseMart.EmptyToEndFilter',
+	'HouseMart.SearchPostFilter'
 ]);
 
 postLoaderControllers.config(['uiGmapGoogleMapApiProvider',function(uiGmapGoogleMapApiProvider) {
