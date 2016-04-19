@@ -32,10 +32,11 @@ The secondary target is to learn as many different techniques and technologies b
 * Build MVC Express.js server
 
 ##Technology Stack Overview:
-* Server Runtime Environment: Node.js
-* Webapp Server Framework: Express.js
 * Database: Microsoft SQL Server
 * Microsoft SQL Server - Node.js connecting driver: mssql(tedios)
+* Server Runtime Environment: Node.js
+* Webapp Server Framework: Express.js
+* Templating Engine: Jade
 * Webapp Client MVC Framework: Angular.js
 * Webapp UI Framework: Bootstrap3 + angular-ui
 ...
