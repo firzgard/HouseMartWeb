@@ -46,32 +46,6 @@ router.route('/')
 				
 				if (result.rowsAffected > 0) {
 
-/*					// Update images' url
-					var updateParam = {
-						postID: result.recordSet[0].postID,
-						image1: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image1.jpeg',
-						image2: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image2.jpeg',
-						image3: '/assets/shared/imgs/posts/' + result.recordSet[0].postID + '/image3.jpeg'
-					};
-
-					databaseUtils.posts.postDetail.patch(updateParam)
-						.then(function(result){
-
-							if(result.rowsAffected > 0) {
-								return res.status(201).json({postID: updateParam.postID});
-							} else {
-								return res.sendStatus(202);
-							}
-						})
-						.catch(function(err){
-							
-							if (err.status) {
-								return res.sendStatus(err.status);
-							}
-
-							return res.sendStatus(500);
-						});*/
-
 					if(result.rowsAffected > 0) {
 							return res.status(201).json({postID: result.recordSet[0].postID});
 						} else {

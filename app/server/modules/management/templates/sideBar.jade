@@ -1,7 +1,12 @@
 ul.nav.nav-pills.nav-stacked
-	li(role='presentation').active
-		a(href='')
-			| Account Setting
-	li(role='Posts')
-		a(href='')
-			| Post Management
+	li(role='Posts' ng-class="{'active': MainController.currentTab === 'posts'}")
+		a(ui-sref='posts')
+			| Posts Management
+
+	li(role='Users' ng-class="{'active': MainController.currentTab === 'users'}")
+		a(ui-sref='users')
+			| Users Management
+
+	li(role='Account' ng-class="{'active': MainController.currentTab === 'account'}")
+		a(ui-sref='account')
+			| Account Setting 

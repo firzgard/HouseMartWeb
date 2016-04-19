@@ -6,34 +6,45 @@ This project is the web-module of a real estate advertisement posting/browsing s
 This project includes the web server and the website.
 
 ##Training purpose:
-An experimental SEAN  web application (**S**ql Server, **E**xpress.js, **A**ngularJS, **N**ode.js). This project is my first attemmpt to approach full-stack development, as well as to build a JavaScript (semi-)full-stack, with Sql Server, Express.js, AngularJS, and Node.js at it's core.  
+This project is my first attemmpt to full-stack development, as well as to build an experimental JavaScript full-stack, with **Sql Server**, **Express.js**, **Angular.js**, and **Node.js** as it's basic skeleton.
 
-The secondary target is to learn as many different techniques and technologies by integrating them into the project as possible.
+The secondary target is to learn as many different techniques and technologies by integrating them into the stack as possible.
 
 ###Goals:
 #### - Archieved:
-* Interact with sqlserver database from express app (mssql)
-* Use bootstrap3 with angular directive (angular ui-bootstrap)
-* Implement angular nested state/view (angular ui-router)
+* Implement angular nested state/view. Build semi-one-page webapp (angular ui-router)
+* Implement bootstrap3 using angular directive (angular-ui-bootstrap)
 * Implement authentication using Json Web Token
-* Replace callbacks in favour of promises
+* Interact with sqlserver database from express app (mssql)
+* Implement google maps (angular-google-maps)
+* Practice using promises
+* Practice CSS animation
 
 #### - Unfulfilled:
-* Implement google map
 * Server-side pagination
-* File uploading
+* Image uploading and processing
 * Apply CSS preprocessor
-* Separation of dev/test/dist environment
+* Separation of development/test/distribution environment
 * Automatic testing
-* Fine-tune dist environment
-  * Uglifiy, minify, compressing resources
-  * Server Logging
+* Fine-tune distribution environment
+    * Uglifiy, minify, bundling, compressing resources
+    * Server Logging
+* Build MVC Express.js server
 
-##Usage Guideline:
+##Technology Stack Overview:
+* Server Runtime Environment: Node.js
+* Webapp Server Framework: Express.js
+* Database: Microsoft SQL Server
+* Microsoft SQL Server - Node.js connecting driver: mssql(tedios)
+* Webapp Client MVC Framework: Angular.js
+* Webapp UI Framework: Bootstrap3 + angular-ui
+...
 
-###API ROUTES:
-
-#### Create post (User/Admin)  
+## Usage Guideline:
+### Database:
+A Microsoft SQL Server databate backup file named **HouseMart.bak** is stored at root folder.
+### API ROUTES:
+#### Create post:
 `http://(host)[:(port)]/api/posts (PUT)`
 
 #####Supported params:
@@ -53,7 +64,7 @@ The secondary target is to learn as many different techniques and technologies b
   * longitude (Decimal(9, 6))
   * isPublic (Boolean): Only Admin is allowed to set
 
-####  Get/search all posts with general infos (Guest/User/Admin)  
+####  Get/search all posts with general infos:
 `http://(host)[:(port)]/api/posts[?[creatorID=(creatorID)][&][districtID=(districtID)][&][provinceID=(provinceID)][&][minPrice=(minPrice)][&][maxPrice=(maxPrice)][&][minArea=(minArea)][&][maxArea=(maxArea)][&][isDetailed=(isDetailed)]] (GET)`
 
 #####Supported query params:  
@@ -64,7 +75,8 @@ The secondary target is to learn as many different techniques and technologies b
   * maxPrice (Float)
   * minArea (Float)
   * maxArea (Float)
-  * isDetailed (Boolean): Default is false. If allowed to set and is setted to true, then show hidden details.
+  * getAuthorizedPosts (Boolean): Default is false. If setted to true, then return all post that this user is allowed to modify.
+  * isDetailed (Boolean): Default is false. If setted to true, then show hidden post details.
 
 #####Returned json file structure:
 ######*Without* flagged isDetailed:
@@ -120,7 +132,7 @@ The secondary target is to learn as many different techniques and technologies b
 ]
 ```
   
-####  Get 1 post with detailed infos (Guest/User/Admin)  
+####  Get 1 post with detailed infos: 
 `http://(host)[:(port)]/api/posts/(postID)[?isDetailed=(isDetailed)] (GET)`
 
 #####Supported query params:  
@@ -184,7 +196,7 @@ The secondary target is to learn as many different techniques and technologies b
 }
 ```
 
-####  Update 1 post (User/Admin)  
+####  Update 1 post:
 `http://(host)[:(port)]/api/posts/(postID) (PATCH)`
 
 #####Supported params:
@@ -207,21 +219,21 @@ The secondary target is to learn as many different techniques and technologies b
   * image3 (Boolean)
   * isPublic (Boolean): Only Admin is allowed to set
 
-#### Delete 1 post (User/Admin)  
+#### Delete 1 post:  
 `http://(host)[:(port)]/api/posts/(postID) (DELETE)`
   
-#### Get all users  
+#### ~~Get all users:~~
 `http://(host)[:(port)]/api/users (GET)`
-#### Create user (Guest)  
+#### ~~Create user:~~
 `http://(host)[:(port)]/api/users (POST)`
-#### Get 1 user info (User)  
+#### ~~Get 1 user info:~~
 `http://(host)[:(port)]/api/users/(UserID) (GET)`
-#### Update user info (User)  
+#### ~~Update user info:~~
 `http://(host)[:(port)]/api/users/(UserID) (POST)`
-#### Delete 1 user (Admin)  
+#### ~~Delete 1 user~~
 `http://(host)[:(port)]/api/users/(userID) (DELETE)`
   
-#### Get province list (Guest/User/Admin)  
+#### Get province list:
 `http://(host)[:(port)]/api/provinces (GET)`
 #####Returned json file structure:
 ```javascript
@@ -234,7 +246,7 @@ The secondary target is to learn as many different techniques and technologies b
 ]
 ```
   
-#### Get district list (Guest/User/Admin)  
+#### Get district list:
 `http://(host)[:(port)]/api/districts (GET)`
 #####Returned json file structure:
 ```javascript
@@ -249,5 +261,5 @@ The secondary target is to learn as many different techniques and technologies b
 ]
 ```
   
-#### Authenticate non-web user (Guest):  
+#### Authenticate user and return access token:  
 `http://(host)[:(port)]/api/authenticate) (POST)`

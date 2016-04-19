@@ -1,6 +1,6 @@
 <div class="post-loader" ng-hide="PostLoaderController.showDetail" >
 
-	<uib-alert ng-if="PostLoaderController.newPostCreated" type="success" dismiss-on-timeout="5000" close="PostLoaderController.newPostCreated = false" role="alert">New post created successfully!!</uib-alert>
+	<uib-alert ng-if="PostLoaderController.alert" type="success" dismiss-on-timeout="5000" close="PostLoaderController.alert = null" role="alert">{{PostLoaderController.alert}}</uib-alert>
 
 	<div class="paginator-option">
 
@@ -24,7 +24,7 @@
 
 	<!-- Posts -->
 	<div id="posts">
-		<a dir-paginate="post in PostLoaderController.posts | searchPost: PostLoaderController.postFilter | filter: PostLoaderController.postFilter.general | orderBy:PostLoaderController.paginator.orderProp.expression:PostLoaderController.paginator.orderProp.reverse | emptyToEnd: PostLoaderController.paginator.orderProp.expression | itemsPerPage: PostLoaderController.paginator.itemsPerPage" pagination-id="post-loader" ui-sref="main.postDetail({postID: post.postID})" class="post-item row" ng-class="{'is-public': post.isPublic, 'not-public': !post.isPublic}">
+		<a dir-paginate="post in PostLoaderController.posts | searchPost: PostLoaderController.postFilter | filter: PostLoaderController.postFilter.general | orderBy:PostLoaderController.paginator.orderProp.expression:PostLoaderController.paginator.orderProp.reverse | emptyToEnd: PostLoaderController.paginator.orderProp.expression | itemsPerPage: PostLoaderController.paginator.itemsPerPage" pagination-id="post-loader" ui-sref=".postDetail({postID: post.postID})" class="post-item row" ng-class="{'is-public': post.isPublic, 'not-public': (post.isPublic !== undefine && !post.isPublic)}">
 			<div class="col-sm-4 post-col">
 				<img class="post-img" ng-src="{{post.image1 || '/assets/shared/imgs/home-icon.png'}}" fallback-src="/assets/shared/imgs/home-icon.png" alt="No Image" loading-src/>
 			</div>
@@ -35,7 +35,6 @@
 					<span ng-show="post.dateCreate">Posted On: {{post.dateCreate | date: 'MMM d, y'}}&nbsp&nbsp&nbsp&nbsp&nbsp</span>
 					<span ng-show="post.dateUpdate">Last Updated: {{post.dateUpdate | date: 'MMM d, y'}}</span>
 				</div>
-				{{post.isPublic == true}} {{post.isPublic == false}} {{post.isPublic}}
 
 				<div class="col-sm-12 post-address">
 					{{post.address}}, {{post.districtName}}, {{post.provinceName}}

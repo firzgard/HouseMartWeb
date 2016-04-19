@@ -205,10 +205,11 @@ module.exports = {
 					}
 				}
 
+				console.log(req.body);
 				if (typeof req.body.isPublic  !== 'undefined') {
 					// Only admin is allowed to set isPublic flag
 					if (req.authorization.role === configs.roles.admin) {
-						preparedParams.isPublic = (req.query.isPublic.toUpperCase() === 'TRUE')
+						preparedParams.isPublic = (req.body.isPublic.toUpperCase() === 'TRUE')
 					} else {
 						preparedParams.isPublic = false;
 					}
@@ -379,16 +380,25 @@ module.exports = {
 					}
 
 					if (typeof req.body.isPublic !== 'undefined') {
-						// Only admin is allowed to set isPublic flag
-						if (req.authorization.role === configs.roles.admin) {
 
-							if(req.body.isPublic.toUpperCase() === 'TRUE') {
-								preparedParams.isPublic = true;
-							} else if(req.body.isPublic.toUpperCase() === 'FALSE') {
-								preparedParams.isPublic = false;
-							}
-						} else {
-							preparedParams.isPublic = false;
+						switch(req.authorization.role) {
+							// Admin can freely set isPublic flag
+							case configs.roles.admin:
+
+								if(req.body.isPublic.toUpperCase() === 'TRUE') {
+									preparedParams.isPublic = true;
+								} else if(req.body.isPublic.toUpperCase() === 'FALSE') {
+									preparedParams.isPublic = false;
+								}
+								break;
+
+							// User is only allowed to set it to FALSE
+							case configs.roles.user:
+
+								if(req.body.isPublic.toUpperCase() === 'FALSE') {
+									preparedParams.isPublic = false;
+								}
+								break;
 						}
 					}
 				}

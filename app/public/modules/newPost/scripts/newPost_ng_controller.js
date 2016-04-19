@@ -4,6 +4,7 @@
 
 var newPostControllers = angular.module('HouseMart.NewPostControllers', [
 	'uiGmapgoogle-maps',
+	'frapontillo.bootstrap-switch',
 	'HouseMart.APIServices'
 ]);
 
@@ -21,7 +22,7 @@ newPostControllers.controller('NewPostController', function ($scope, $postServic
 	this.createPost = function () {
 
 		var modalInstance = $uibModal.open({
-			templateUrl: '/assets/modules/newPost/templates/newPost.html',
+			templateUrl: '/assets/templates/newPost.html',
 			controller: 'NewPostModalController as NewPostModalController',
 			size: 'lg',
 			resolve: {
@@ -32,7 +33,7 @@ newPostControllers.controller('NewPostController', function ($scope, $postServic
 		});
 
 		modalInstance.result.then(function () {
-			$scope.PostLoaderController.newPostCreated = true;
+			$scope.PostLoaderController.alert = 'New post created successfully!!';
 			$scope.PostLoaderController.posts = $postService.refreshAuthorizedPosts();
 		});
 	};
@@ -43,11 +44,12 @@ newPostControllers.controller('NewPostModalController',
 
 		var thisScope = this;
 
-		this.provinces = $provinceService.getProvinces();
-		this.districts = $districtService.getDistricts();
+		thisScope.provinces = $provinceService.getProvinces();
+		thisScope.districts = $districtService.getDistricts();
 
-		this.newPost = {
-			type: 1
+		thisScope.newPost = {
+			type: 1,
+			isPublic: false
 		};
 
 		uiGmapGoogleMapApi.then(function(maps) {

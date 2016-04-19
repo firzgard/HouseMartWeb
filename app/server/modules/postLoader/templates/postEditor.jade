@@ -1,19 +1,25 @@
 form(name='post', ng-submit='PostEditorController.save()')
 
 	.row.post-row.vertical-align
-		.col-sm-6
+		.col-sm-5
 			a(ng-click="PostEditorController.goBack()") Houses
-		.col-sm-6.text-right
-			if role === configs.roles.admin
-				input.btn.btn-danger(ng-click='PostEditorController.delete' type='button' ,value='Delete')
-				| &nbsp&nbsp&nbsp
-			.btn-group
+		.col-sm-7.text-right
+			case role
+				when configs.roles.admin
+					span.post-btn-group
+						input(bs-switch, type='checkbox' , ng-model='PostEditorController.editedPost.isPublic', switch-on-color='success', switch-on-text='Published', switch-off-color='danger', switch-off-text='Unpublished', switch-handle-width='5.5em')
+					span.post-btn-group
+						input.btn.btn-danger(ng-click='PostEditorController.delete()', type='button' ,value='Delete')
+				when configs.roles.user
+					span.post-btn-group
+						input.btn.btn-danger(ng-click='PostEditorController.takeDown()', type='button' ,value='Take Down', ng-disabled='!PostEditorController.post.isPublic')
+			.btn-group.post-btn-group
 				input.btn.btn-default(ng-click='PostEditorController.reset()', type='button' ,value='Reset')
 				input.btn.btn-primary(ng-disabled='post.$invalid', type='submit' ,value='Save')
 
 	.row.post-row(ng-if='PostEditorController.updated || PostEditorController.updateError')
 		uib-alert(ng-if='PostEditorController.updated', type='success', close='PostEditorController.updated = false', role='alert') Updated successfully!!
-		uib-alert(ng-if='PostEditorController.updateError', type='danger', dismiss-on-timeout='5000', close='PostEditorController.updateError = false', role='alert') Error! A team of armed monkeys is preventing us from updating the post! Try again later!
+		uib-alert(ng-if='PostEditorController.updateError', type='danger', dismiss-on-timeout='5000', close='PostEditorController.updateError = false', role='alert') Error! A team of armed monkeys is preventing us from updating our post! Try again later!
 		
 	.row.post-row
 		// Left Column

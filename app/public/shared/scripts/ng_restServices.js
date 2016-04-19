@@ -20,7 +20,8 @@ apiServices.factory('$APIService', function($resource, $httpParamSerializer, $ht
 		}),
 		postDetails: $resource('api/posts/:postID', {postID: '@postID'}, {
 			get: {method: 'GET', isArray: false, withCredentials: true, responseType: 'json'},
-			patch: {method: 'PATCH', withCredentials: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, transformRequest: transformFormData}
+			patch: {method: 'PATCH', withCredentials: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, transformRequest: transformFormData},
+			delete: {method: 'DELETE', withCredentials: true}
 		}),
 		provinces: $resource('api/provinces', {}, {
 			get: {method: 'GET', isArray: true, withCredentials: true, responseType: 'json'}

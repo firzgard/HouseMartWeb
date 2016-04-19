@@ -27,6 +27,13 @@ houseMart.config(function($stateProvider, $urlRouterProvider) {
 		});
 })
 
+houseMart.run(function($rootScope) {
+
+	$rootScope.$on('$stateChangeSuccess', function() {
+		document.body.scrollTop = document.documentElement.scrollTop = 0;
+	});
+})
+
 houseMart.controller('MainController', function($window){
 	this.location = {
 		path: $window.location.pathname

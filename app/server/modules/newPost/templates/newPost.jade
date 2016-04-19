@@ -1,0 +1,92 @@
+form.new-post-modal(name='newPost', ng-submit='NewPostModalController.submit()')
+	.modal-header
+		.col-md-7
+			h3.modal-title New Post FTW!!
+
+		// Publishing switcher
+		if role === configs.roles.admin
+			.col-md-5(style='text-align: right;')
+				input(bs-switch, type='checkbox' , ng-model='NewPostModalController.newPost.isPublic', switch-on-color='success', switch-on-text='Published', switch-off-color='danger', switch-off-text='Unpublished', switch-handle-width='6em')
+	.modal-body.row
+		// Alert for posting unsuccessfully
+		.col-md-12(ng-if='NewPostModalController.putError')
+			uib-alert(type='danger', dismiss-on-timeout='5000', close='NewPostModalController.putError = false')
+				| Error! A team of armed monkeys is preventing us from creating new post! Try again later!
+
+		// Right Column
+		.col-md-6
+
+			// Title
+			.form-group
+				label.control-label(for='new-post-title') Title*
+				input#new-post-title.form-control(type='text', ng-model='NewPostModalController.newPost.title', name='title', ng-maxlength='50', ng-minlength='10', placeholder='Title', ng-required='true', ng-model-options="{ updateOn: 'blur' }")
+				p.help-block(ng-show='newPost.title.$error.minlength') Title must be longer than 10 characters!
+				p.help-block(ng-show='newPost.title.$error.maxlength') Title must be shorter than 50 characters!
+				p.help-block(ng-show='newPost.title.$error.required && newPost.title.$touched') Required field!
+
+			// Address
+			.form-group
+				label.control-label(for='new-post-address') Address*
+				input#new-post-address.form-control(type='text', ng-model='NewPostModalController.newPost.address', name='address', ng-maxlength='150', ng-minlength='10', placeholder='e.g. 10 Nguyễn Trãi', ng-required='true', ng-model-options="{ updateOn: 'blur' }")
+				p.help-block(ng-show='newPost.address.$error.minlength') Address must be longer than 10 characters!
+				p.help-block(ng-show='newPost.address.$error.maxlength') Address must be shorter than 150 characters!
+				p.help-block(ng-show='newPost.address.$error.required && newPost.address.$touched') Required field!
+
+			// OwnerName
+			.form-group
+				label.control-label(for='new-post-owner-name') Owner Name
+				input#new-post-owner-name.form-control(type='text', ng-model='NewPostModalController.newPost.ownerName', name='ownerName', ng-maxlength='60', placeholder='Owner Name', ng-model-options="{ updateOn: 'blur' }")
+				p.help-block(ng-show='newPost.ownerName.$error.maxlength') Owner Name must be shorter than 60 characters!
+
+			// Phone
+			.form-group
+				label.control-label(for='new-post-phone') Phone
+				input#new-post-phone.form-control(type='tel', ng-model='NewPostModalController.newPost.phone', name='phone', ng-maxlength='20', placeholder='e.g. 1234ABC987XYZ', ng-model-options="{ updateOn: 'blur' }")
+				p.help-block(ng-show='newPost.phone.$error.maxlength') Phone must be shorter than 20 characters!
+
+			// Structure Size
+			.form-group
+				label.control-label(for='new-post-area') Structure Size
+				.input-group
+					input#new-post-area.form-control(type='number', ng-model='NewPostModalController.newPost.area', name='area', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
+					span.input-group-addon
+						| m
+						sup 2
+				p.help-block(ng-show='newPost.area.$invalid') Size must be a number with less than 4 decimal places!!
+
+			// Price
+			.form-group
+				label.control-label(for='new-post-price') Price
+				.input-group
+					span.input-group-addon $
+					input#new-post-price.form-control(type='number', ng-model='NewPostModalController.newPost.price', name='price', ng-pattern='/^[0-9]+(\.[0-9]{1,3})?$/', step='0.001', placeholder='e.g. 9999.999', ng-model-options="{ updateOn: 'default blur' }")
+				p.help-block(ng-show='newPost.price.$invalid') Price must be a number with less than 4 decimal places!!
+
+			// Description
+			.form-group
+				label.control-label(for='new-post-description') Description
+				textarea#new-post-description.form-control(type='tel', ng-model='NewPostModalController.newPost.description', name='description', ng-maxlength='1000', placeholder='Description', ng-model-options="{ updateOn: 'blur' }", style='resize:vertical;')
+				p.help-block(ng-show='newPost.description.$error.description') Description must be shorter than 1000 characters!
+
+		// Right Column
+		.col-md-6
+
+			// Province ID
+			.form-group
+				label.control-label(for='new-post-province-id') Province*
+				select#post-province-id.form-control(ng-model='NewPostModalController.newPost.provinceID', name='provinceID', ng-options="opt.provinceID as opt.provinceName for opt in NewPostModalController.provinces | orderBy: 'provinceName'", ng-model-options="{ updateOn: 'default blur' }", ng-required='true')
+				p.help-block(ng-show='newPost.provinceID.$error.required && newPost.provinceID.$touched') Required field!
+
+			// District ID
+			.form-group
+				label.control-label(for='new-post-district-id') District*
+				select#post-district-id.form-control(ng-model='NewPostModalController.newPost.districtID', name='districtID', ng-options="opt.districtID as opt.districtName for opt in (NewPostModalController.districts | filter: {provinceID: NewPostModalController.newPost.provinceID}: true | orderBy: 'districtName')", ng-model-options="{ updateOn: 'default blur' }", ng-required='true', ng-disabled='newPost.provinceID.$invalid')
+				p.help-block(ng-show='newPost.districtID.$error.required && newPost.districtID.$touched') Required field!
+
+			// Google Map
+			.form-group
+				ui-gmap-google-map(center='NewPostModalController.map.center', zoom='NewPostModalController.map.zoom', events='NewPostModalController.map.events')
+					ui-gmap-marker(coords='NewPostModalController.marker.coords', options='NewPostModalController.marker.options', idkey="'houseMarker'")
+	.modal-footer
+		input.btn.btn-primary(type='submit', ng-disabled='newPost.$invalid', value='Submit')
+		input.btn.btn-warning(type='button', ng-click='NewPostModalController.cancel()', value='Cancel')

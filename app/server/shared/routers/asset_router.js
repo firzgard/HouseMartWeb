@@ -19,9 +19,11 @@ var authenticator	= require(makeRootPath('app/server/shared/middlewares/authenti
 // ================================================
 
 // Route for providing specific libraries
+
 router.use('/libs/jquery', express.static(makeRootPath('node_modules/jquery/dist')));
 router.use('/libs/lodash', express.static(makeRootPath('node_modules/lodash')));
 router.use('/libs/waypoints', express.static(makeRootPath('node_modules/waypoints/lib')));
+router.use('/libs/bootstrap-switch', express.static(makeRootPath('node_modules/bootstrap-switch/dist')));
 
 router.use('/libs/bootstrap', express.static(makeRootPath('node_modules/bootstrap/dist')));
 
@@ -34,14 +36,18 @@ router.use('/libs/angular-ui-bootstrap', express.static(makeRootPath('node_modul
 router.use('/libs/angular-ui-scrollpoint', express.static(makeRootPath('bower_components/angular-ui-scrollpoint/dist')));
 router.use('/libs/angular-google-maps', express.static(makeRootPath('node_modules/angular-google-maps/dist')));
 router.use('/libs/angular-utils-pagination', express.static(makeRootPath('node_modules/angular-utils-pagination')));
+router.use('/libs/angular-bootstrap-switch', express.static(makeRootPath('node_modules/angular-bootstrap-switch/dist')));
 router.use('/libs/angular-waypoints', express.static(makeRootPath('bower_components/angular-waypoints/dist')));
+
 
 // Route for providing assets that requires rendering
 
 router.use('/templates/postEditor.html', authenticator.authorize, function(req, res){
 	return res.render(makeRootPath('app/server/modules/postLoader/templates/postEditor.jade'), req.authorization);
 });
-
+router.use('/templates/newPost.html', authenticator.authorize, function(req, res){
+	return res.render(makeRootPath('app/server/modules/newPost/templates/newPost.jade'), req.authorization);
+});
 
 // Route for providing static assets
 router.use('/', express.static(makeRootPath('app/public')));
