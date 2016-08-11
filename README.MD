@@ -1,35 +1,15 @@
 #HouseMart Webapp
+An university assignment project.
 
 ##Business Idea:
 This project is the web-module of a real estate advertisement posting/browsing solution, which includes a web server, a website and a REST API-consumming Android native app.  
 
-This project includes the web server and the website.
+This repo includes the web server and the website.
 
 ##Training purpose:
-This project is my first attemmpt to full-stack development, as well as to build an experimental JavaScript full-stack, with **Sql Server**, **Express.js**, **Angular.js**, and **Node.js** as it's basic skeleton.
+This project is my first attemmpt to full-stack development, as well as to build an experimental JavaScript semi-full-stack, with **Sql Server**, **Express.js**, **Angular.js**, and **Node.js** as it's basic skeleton.
 
 The secondary target is to learn as many different techniques and technologies by integrating them into the stack as possible.
-
-###Goals:
-#### - Archieved:
-* Implement angular nested state/view. Build semi-one-page webapp (angular ui-router)
-* Implement bootstrap3 using angular directive (angular-ui-bootstrap)
-* Implement authentication using Json Web Token
-* Interact with sqlserver database from express app (mssql)
-* Implement google maps (angular-google-maps)
-* Practice using promises
-* Practice CSS animation
-
-#### - Unfulfilled:
-* Server-side pagination
-* Image uploading and processing
-* Apply CSS preprocessor
-* Separation of development/test/distribution environment
-* Automatic testing
-* Fine-tune distribution environment
-    * Uglifiy, minify, bundling, compressing resources
-    * Server Logging
-* Build MVC Express.js server
 
 ##Technology Stack Overview:
 * Database: Microsoft SQL Server
